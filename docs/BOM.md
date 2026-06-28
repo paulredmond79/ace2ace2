@@ -75,12 +75,8 @@ Connect the cable shield at the ACE 2 Pro end only.
 
 ## 3. Cable B: Raspberry Pi → ACE Pro (USB)
 
-> ⚠️ **HW-2 UNRESOLVED**: Only build this cable after physically confirming that the ACE
-> Pro's external chassis port is the Molex 2×3 connector. If the chassis exposes a standard
-> USB receptacle (USB-A, Micro-B, etc.), use a standard USB cable instead. See
-> `docs/Unknowns.md` HW-2.
-
-Assuming the external port is the Molex Micro-Fit 3.0 Male 2×3:
+**Confirmed (physical inspection, 2026-06-28):** The ACE Pro external chassis port is
+the Molex Micro-Fit 3.0 Male 2×3. No standard USB port is present. Build this cable.
 
 | Qty | Item | Molex Part | Source | Est. Unit Cost |
 |-----|------|-----------|--------|---------------|

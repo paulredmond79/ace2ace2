@@ -146,13 +146,14 @@ for EMI rejection, with GND carried on its own insulated conductor.
 
 ### Cable B: Raspberry Pi → ACE Pro (USB)
 
-> ⚠️ **HW-2 UNRESOLVED**: The ACE Pro's external chassis connector type has not been
-> physically confirmed. If the chassis exposes a standard USB port (USB-A, Micro-B, etc.),
-> no custom cable is needed — use a standard USB cable instead. Only build this custom
-> Molex cable after confirming the external port is the Molex 2×3 connector. See
-> `docs/Unknowns.md` HW-2.
+**Confirmed (physical inspection, 2026-06-28):** The ACE Pro back panel exposes the
+Molex Micro-Fit 3.0 Male 2×3 connector externally. There is no standard USB port on
+the chassis — this custom cable is required.
 
-Assuming the external port is the Molex Micro-Fit 3.0 Male 2×3 connector, build this cable:
+> Note: A second Molex 2×2 connector is also present on the back panel (lower, below
+> the 2×3). Its purpose is unknown (HW-4 in `docs/Unknowns.md`). Do not connect to it.
+
+Build this cable to connect the Pi to the ACE Pro:
 
 ```
 Molex Micro-Fit 3.0 Female 2×3  →  USB-A Male (to Pi USB port)

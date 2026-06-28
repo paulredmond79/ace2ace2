@@ -80,16 +80,14 @@ can be fully implemented. Items are removed when resolved.
 - **Status**: High-confidence hypothesis; needs physical confirmation before ordering parts
 - **Documented**: Pinout and Molex part numbers recorded in `docs/Hardware.md`
 
-### HW-2: ACE Pro External Connector / Port Type
-- **Unknown**: Whether the ACE Pro exposes the Molex Micro-Fit 3.0 2×3 PCB connector
-  externally, or has a standard USB receptacle (USB-A, Micro-B, etc.) on the chassis.
-  The Molex 6-pin is confirmed as the internal PCB connector from printers-for-people
-  hardware photos; the external chassis interface needs physical inspection.
-- **How to discover**: Physical inspection of ACE Pro unit
-- **Blocks**: Finaling custom cable design — if external port is standard USB then no
-  custom Molex cable is needed
-- **Status**: Internal PCB pinout known (Molex 2×3, see `docs/Hardware.md`); external
-  chassis connector unconfirmed
+### HW-4: ACE Pro Second Connector (2×2, lower left on back panel)
+- **Unknown**: Purpose of the second Molex Micro-Fit 3.0 2×2 connector visible on the
+  ACE Pro back panel, below the 2×3 USB connector. Could be RS485, SWD/debug, or another
+  serial interface.
+- **How to discover**: Probe with multimeter; compare to ACE 2 Pro RS485 connector pinout;
+  check community hardware teardowns
+- **Blocks**: Nothing critical — USB path is confirmed; this is additional information
+- **Status**: Newly observed; not yet investigated
 
 ### HW-3: RS485 Bus Voltage
 - **Unknown**: Signal voltage on RS485 bus (5V or 3.3V differential)
@@ -117,5 +115,6 @@ can be fully implemented. Items are removed when resolved.
 | USB-1b | ACE Pro USB VID | 0x28E9 (GigaDevice GD32F303) | Community, USB database |
 | USB-2b | ACE Pro MCU | GD32F303 | printers-for-people HARDWARE.md |
 | USB-5 | ACE 2 Pro USB chip | WCH CH343, VID 0x1A86 | hakimio IDA analysis |
+| HW-2 | ACE Pro external chassis connector | Molex Micro-Fit 3.0 Male 2×3 (6-pin) — custom cable required | Physical inspection (user photo, 2026-06-28) |
 
 *Date resolved: 2026-06-28 — initial research phase*
