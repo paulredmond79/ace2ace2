@@ -291,9 +291,9 @@ If not isolated, ensure common GND between Pi and RS485 bus.
 | 1 | MicroSD card | 32GB+ Class 10 / A1 | ~$8 |
 | 1 | Molex housing 2×2 | `43025-0400` — Cable A (daisy-chain → adapter) | ~$0.60 |
 | 1 | Molex housing 2×3 | `43025-0600` — Cable B (Pi → ACE Pro) | ~$0.60 |
-| 10 | Molex crimp terminals | `43030-0007`, 24–28 AWG | ~$2 |
+| 10 | Molex crimp terminals | `43030-0007`, 20–24 AWG | ~$2 |
 | 1 | USB-A Male plug or stripped USB-A cable | Cable B (Pi → ACE Pro) | ~$2 |
-| 0.5 m | Shielded twisted pair, 24 AWG | Cable A (daisy-chain RS485 run) | ~$2 |
+| 0.5 m | 3-conductor shielded cable, 22–24 AWG | Cable A (daisy-chain RS485 run — needs separate A, B, GND conductors) | ~$3 |
 | 1 | Molex crimp tool | Engineer PA-09 or PA-21 | ~$20 (one-time) |
 
 **Total approximate cost (excluding Pi):** ~$35–50
