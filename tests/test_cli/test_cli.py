@@ -1,10 +1,14 @@
 """Tests for CLI commands."""
 
+import re
+
 from typer.testing import CliRunner
 
 from ace_bridge.cli import app
 
 runner = CliRunner(env={"NO_COLOR": "1"})
+
+_ANSI = re.compile(r"\x1b\[[0-9;]*[mGKHF]")
 
 
 def test_cli_help() -> None:
@@ -20,7 +24,7 @@ def test_start_simulate() -> None:
     # For now just verify the command is registered
     result = runner.invoke(app, ["start", "--help"])
     assert result.exit_code == 0
-    assert "--simulate" in result.output
+    assert "--simulate" in _ANSI.sub("", result.output)
 
 
 def test_inspect_usb_help() -> None:
