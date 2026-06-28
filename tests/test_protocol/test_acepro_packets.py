@@ -8,18 +8,17 @@ Source: printers-for-people/ACEResearch, Kobra-S1/ACEPRO
 
 import json
 import struct
+
 import pytest
 
 from ace_bridge.protocol.acepro.packets import (
-    FRAME_HEADER,
     FRAME_FOOTER,
-    ACEProMethod,
-    ACEProPacket,
+    FRAME_HEADER,
     FrameError,
-    decode_frame,
-    encode_frame,
     build_request,
     build_response,
+    decode_frame,
+    encode_frame,
     find_frames,
 )
 from ace_bridge.utils.crc import crc16_mcrf4xx
@@ -79,20 +78,26 @@ class TestDecodeFrame:
         assert packet.error_code == 0
 
     def test_decode_invalid_header_raises(self) -> None:
-        bad = b"\x00\xAA\x03\x00" + b"foo" + b"\x00\x00\xFE"
+        bad = b"\x00\xaa\x03\x00" + b"foo" + b"\x00\x00\xfe"
         with pytest.raises(FrameError, match="Invalid header"):
             decode_frame(bad)
 
     def test_decode_invalid_footer_raises(self) -> None:
         payload = b'{"id":1}'
         crc = crc16_mcrf4xx(payload)
-        raw = FRAME_HEADER + struct.pack("<H", len(payload)) + payload + struct.pack("<H", crc) + b"\x00"
+        raw = (
+            FRAME_HEADER
+            + struct.pack("<H", len(payload))
+            + payload
+            + struct.pack("<H", crc)
+            + b"\x00"
+        )
         with pytest.raises(FrameError, match="Invalid footer"):
             decode_frame(raw)
 
     def test_decode_too_short_raises(self) -> None:
         with pytest.raises(FrameError, match="too short"):
-            decode_frame(b"\xFF\xAA\x00")
+            decode_frame(b"\xff\xaa\x00")
 
     def test_decode_wrong_crc_detected(self) -> None:
         payload = b'{"id":1,"method":"get_status"}'

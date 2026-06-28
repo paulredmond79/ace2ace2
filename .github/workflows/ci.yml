@@ -1,0 +1,169 @@
+name: CI
+
+# Trigger only when code, tests, or this workflow file changes.
+# Docs, research notes, hardware diagrams, and config YAML are excluded — changes
+# to those files do not need to be validated by CI.
+on:
+  push:
+    branches: ["main", "claude/**"]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - ".github/workflows/ci.yml"
+  workflow_dispatch:
+
+# Cancel any in-progress run for the same ref when a new push arrives.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Phase 1: fast gate (≈10 s) ────────────────────────────────────────────
+  # Ruff + Black run first with a minimal install. They gate every downstream
+  # job: if the code isn't clean there is no point spending minutes on mypy or
+  # pytest.
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Install only what lint needs — no point pulling the full dev tree here.
+      - run: uv pip install --system ruff black
+
+      - run: ruff check src/ tests/
+      - run: black --check src/ tests/
+
+  # ── Phase 2: parallel quality checks (all need lint to pass) ─────────────
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    needs: lint
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: uv pip install --system -e ".[dev]"
+      - run: mypy src/
+
+  # Unit tests run on both the minimum-supported Python (3.11) and the target
+  # (3.12). Integration tests run separately so a slow integration suite never
+  # delays the unit-test signal.
+  test:
+    name: Unit Tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    needs: lint
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - run: uv pip install --system -e ".[dev]"
+
+      - name: Run unit tests
+        run: >-
+          pytest tests/ --ignore=tests/integration
+          -m "not hardware"
+          --cov=ace_bridge
+          --cov-report=xml
+          --cov-report=term-missing
+          --cov-fail-under=70
+          -v
+
+      # Upload coverage only once (3.12 run), not for both matrix legs.
+      - name: Upload coverage
+        if: matrix.python == '3.12'
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
+
+  # Integration tests run only on the target Python version. They exercise the
+  # full bridge in simulate mode without hardware, so they can take longer than
+  # unit tests. Keeping them in a separate job preserves a fast unit-test signal.
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: uv pip install --system -e ".[dev]"
+
+      - name: Run integration tests
+        run: pytest tests/integration/ -v
+
+  # ── Phase 3: build (gated on all quality checks) ─────────────────────────
+  # Only build the wheel once everything is green. The artifact is kept for
+  # 7 days so it can be inspected or deployed without re-running CI.
+  build:
+    name: Build Wheel
+    runs-on: ubuntu-latest
+    needs: [typecheck, test, integration]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: uv pip install --system build
+      - run: python -m build --wheel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ github.sha }}
+          path: dist/*.whl
+          retention-days: 7

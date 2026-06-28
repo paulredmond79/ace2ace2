@@ -21,18 +21,17 @@ from __future__ import annotations
 import json
 import struct
 from dataclasses import dataclass
-from enum import Enum
-from typing import Optional, Any
+from enum import StrEnum
+from typing import Any
 
 from ace_bridge.utils.crc import crc16_mcrf4xx
 
-
-FRAME_HEADER = b"\xFF\xAA"
-FRAME_FOOTER = b"\xFE"
+FRAME_HEADER = b"\xff\xaa"
+FRAME_FOOTER = b"\xfe"
 MAX_FRAME_SIZE = 1024  # Device freezes if frame exceeds this
 
 
-class ACEProMethod(str, Enum):
+class ACEProMethod(StrEnum):
     """Known ACE Pro JSON-RPC method names.
 
     Source: printers-for-people/ACEResearch strace captures + Klipper driver code.
@@ -59,26 +58,26 @@ class ACEProPacket:
     """Decoded ACE Pro USB packet."""
 
     payload_json: dict[str, Any]  # Decoded JSON payload
-    raw: bytes                     # Complete original frame bytes
+    raw: bytes  # Complete original frame bytes
     crc_valid: bool
     crc_expected: int
     crc_computed: int
 
     @property
-    def method(self) -> Optional[str]:
+    def method(self) -> str | None:
         """JSON-RPC method name (for requests)."""
         return self.payload_json.get("method")
 
     @property
-    def request_id(self) -> Optional[int]:
+    def request_id(self) -> int | None:
         return self.payload_json.get("id")
 
     @property
-    def result(self) -> Optional[dict[str, Any]]:
+    def result(self) -> dict[str, Any] | None:
         return self.payload_json.get("result")
 
     @property
-    def error_code(self) -> Optional[int]:
+    def error_code(self) -> int | None:
         return self.payload_json.get("code")
 
 
@@ -162,7 +161,7 @@ def encode_frame(payload: dict[str, Any]) -> bytes:
     return frame
 
 
-def build_request(method: str, request_id: int, params: Optional[dict[str, Any]] = None) -> bytes:
+def build_request(method: str, request_id: int, params: dict[str, Any] | None = None) -> bytes:
     """Build a JSON-RPC request frame."""
     payload: dict[str, Any] = {"id": request_id, "method": method}
     if params:
@@ -210,6 +209,7 @@ def _check_header_collision(payload_bytes: bytes) -> None:
     """
     if FRAME_HEADER in payload_bytes:
         import warnings
+
         warnings.warn(
             "ACE Pro frame payload contains the header sequence 0xFF 0xAA. "
             "This may cause the device to freeze. Consider restructuring the payload.",

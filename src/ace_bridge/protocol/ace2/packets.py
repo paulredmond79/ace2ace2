@@ -16,19 +16,17 @@ from __future__ import annotations
 import struct
 from dataclasses import dataclass
 from enum import IntEnum
-from typing import Optional
 
 from ace_bridge.utils.crc import crc16_kermit
 
-
-FRAME_HEADER = b"\xFF\xAA"
-FRAME_FOOTER = b"\xFE"
-HEADER_SIZE = 7   # 0xFF 0xAA FLAGS SEQ_LO SEQ_HI CMD LEN
-FOOTER_SIZE = 3   # CRC_LO CRC_HI 0xFE
+FRAME_HEADER = b"\xff\xaa"
+FRAME_FOOTER = b"\xfe"
+HEADER_SIZE = 7  # 0xFF 0xAA FLAGS SEQ_LO SEQ_HI CMD LEN
+FOOTER_SIZE = 3  # CRC_LO CRC_HI 0xFE
 MIN_FRAME_SIZE = HEADER_SIZE + FOOTER_SIZE
 MAX_PAYLOAD_SIZE = 100  # confirmed from MCU firmware
 
-FLAGS_REQUEST = 0x00   # host → ACE
+FLAGS_REQUEST = 0x00  # host → ACE
 FLAGS_RESPONSE = 0x80  # ACE → host
 
 
@@ -102,11 +100,11 @@ class ACE2SlotState(IntEnum):
 class ACE2Packet:
     """Decoded ACE 2 Pro RS485 packet."""
 
-    flags: int           # FLAGS byte (0x00 = request, 0x80 = response)
-    seq: int             # 2-byte sequence counter (little-endian)
+    flags: int  # FLAGS byte (0x00 = request, 0x80 = response)
+    seq: int  # 2-byte sequence counter (little-endian)
     command: ACE2Command
-    payload: bytes       # Raw protobuf bytes (not yet decoded)
-    raw: bytes           # Complete original frame bytes
+    payload: bytes  # Raw protobuf bytes (not yet decoded)
+    raw: bytes  # Complete original frame bytes
     crc_valid: bool
     crc_expected: int
     crc_computed: int
@@ -134,9 +132,7 @@ def decode_frame(data: bytes) -> ACE2Packet:
         FrameError: If the frame is malformed
     """
     if len(data) < MIN_FRAME_SIZE:
-        raise FrameError(
-            f"Frame too short: {len(data)} bytes (minimum {MIN_FRAME_SIZE})"
-        )
+        raise FrameError(f"Frame too short: {len(data)} bytes (minimum {MIN_FRAME_SIZE})")
 
     if data[:2] != FRAME_HEADER:
         raise FrameError(f"Invalid header: expected FF AA, got {data[:2].hex().upper()}")
@@ -199,9 +195,7 @@ def encode_frame(
         ValueError: If payload exceeds MAX_PAYLOAD_SIZE
     """
     if len(payload) > MAX_PAYLOAD_SIZE:
-        raise ValueError(
-            f"Payload is {len(payload)} bytes, exceeds maximum {MAX_PAYLOAD_SIZE}"
-        )
+        raise ValueError(f"Payload is {len(payload)} bytes, exceeds maximum {MAX_PAYLOAD_SIZE}")
 
     seq_bytes = struct.pack("<H", seq)
     header_fields = bytes([flags]) + seq_bytes + bytes([int(command), len(payload)])

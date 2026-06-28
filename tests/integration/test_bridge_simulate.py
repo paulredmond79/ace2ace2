@@ -4,6 +4,7 @@ Tests the full bridge stack without hardware.
 """
 
 import asyncio
+
 import pytest
 
 from ace_bridge.bridge.bridge import Bridge
@@ -27,6 +28,7 @@ async def test_bridge_starts_and_stops_in_simulate_mode() -> None:
 
     # Bridge should not have crashed
     from ace_bridge.models.state import BridgeState
+
     # State is STOPPING because we cancelled it
     assert bridge.status.state in (BridgeState.IDLE, BridgeState.STOPPING)
 

@@ -20,7 +20,6 @@ from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Optional
 
 import serial
 import serial.serialutil
@@ -41,14 +40,14 @@ class RS485Config:
     """
 
     port: str = "/dev/ttyAMA0"
-    baud_rate: int = 115200       # ⚠️ Unknown — placeholder
-    parity: str = "N"             # ⚠️ Unknown — placeholder (N=None, E=Even, O=Odd)
-    stop_bits: int = 1            # ⚠️ Unknown — placeholder
+    baud_rate: int = 115200  # ⚠️ Unknown — placeholder
+    parity: str = "N"  # ⚠️ Unknown — placeholder (N=None, E=Even, O=Odd)
+    stop_bits: int = 1  # ⚠️ Unknown — placeholder
     byte_size: int = 8
     timeout_s: float = 0.1
     write_timeout_s: float = 1.0
-    de_re_pin: Optional[int] = None  # GPIO BCM pin for DE/RE control; None = no GPIO control
-    read_only: bool = True           # Safety: default read-only
+    de_re_pin: int | None = None  # GPIO BCM pin for DE/RE control; None = no GPIO control
+    read_only: bool = True  # Safety: default read-only
 
 
 class RS485Driver:
@@ -64,12 +63,12 @@ class RS485Driver:
 
     def __init__(self, config: RS485Config) -> None:
         self._config = config
-        self._serial: Optional[serial.Serial] = None
+        self._serial: serial.Serial | None = None
         self._rx_count = 0
         self._tx_count = 0
         self._error_count = 0
 
-    async def __aenter__(self) -> "RS485Driver":
+    async def __aenter__(self) -> RS485Driver:
         await self.open()
         return self
 
@@ -130,7 +129,7 @@ class RS485Driver:
             if not b:
                 break
             buf.extend(b)
-            if buf[-len(expected):] == expected:
+            if buf[-len(expected) :] == expected:
                 break
         return bytes(buf)
 
@@ -161,7 +160,8 @@ class RS485Driver:
         if self._config.de_re_pin is not None:
             # Import RPi.GPIO lazily — not available on non-Pi systems
             try:
-                import RPi.GPIO as GPIO  # type: ignore[import]
+                import RPi.GPIO as GPIO  # type: ignore[import-untyped]
+
                 GPIO.output(self._config.de_re_pin, GPIO.HIGH)
             except ImportError:
                 pass  # Not on a Pi; acceptable in simulation/test
@@ -170,7 +170,8 @@ class RS485Driver:
         """Assert DE LOW to switch RS485 to receive mode."""
         if self._config.de_re_pin is not None:
             try:
-                import RPi.GPIO as GPIO  # type: ignore[import]
+                import RPi.GPIO as GPIO
+
                 GPIO.output(self._config.de_re_pin, GPIO.LOW)
             except ImportError:
                 pass

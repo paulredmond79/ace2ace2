@@ -14,11 +14,11 @@ Sources:
 """
 
 from ace_bridge.utils.crc import (
-    crc16_mcrf4xx,
-    crc16_kermit,
-    crc16_ibm,
-    crc8_xor,
     crc8_sum,
+    crc8_xor,
+    crc16_ibm,
+    crc16_kermit,
+    crc16_mcrf4xx,
     try_all_crcs,
 )
 
@@ -69,10 +69,10 @@ class TestOtherCRCs:
         assert crc8_xor(b"") == 0
 
     def test_crc8_xor_single(self) -> None:
-        assert crc8_xor(b"\xAA") == 0xAA
+        assert crc8_xor(b"\xaa") == 0xAA
 
     def test_crc8_sum_overflow(self) -> None:
-        assert crc8_sum(b"\xFF\x01") == 0x00
+        assert crc8_sum(b"\xff\x01") == 0x00
 
 
 class TestTryAllCRCs:
@@ -84,7 +84,7 @@ class TestTryAllCRCs:
         assert "crc8_xor" in result
 
     def test_all_values_are_ints(self) -> None:
-        for key, val in try_all_crcs(b"\xAA\xBB").items():
+        for key, val in try_all_crcs(b"\xaa\xbb").items():
             assert isinstance(val, int), f"{key} is not int"
 
     def test_mcrf4xx_identified(self) -> None:

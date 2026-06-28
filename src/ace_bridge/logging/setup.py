@@ -6,7 +6,6 @@ import json
 import logging
 import logging.handlers
 from pathlib import Path
-from typing import Optional
 
 
 class JSONFormatter(logging.Formatter):
@@ -26,7 +25,7 @@ class JSONFormatter(logging.Formatter):
 
 def setup_logging(
     level: str = "INFO",
-    log_file: Optional[Path] = None,
+    log_file: Path | None = None,
     json_output: bool = False,
 ) -> None:
     """Configure root logger with console and optional file handler.

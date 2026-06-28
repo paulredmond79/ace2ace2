@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterator
 from datetime import datetime
 from pathlib import Path
-from typing import Iterator, Optional
 
 from ace_bridge.capture.writer import CapturedPacket
 
@@ -24,7 +24,9 @@ def read_capture(path: Path) -> Iterator[CapturedPacket]:
                     direction=data["direction"],
                     raw=bytes.fromhex(data["raw_hex"].replace(" ", "")),
                     timestamp=data.get("timestamp", 0.0),
-                    wall_time=datetime.fromisoformat(data.get("wall_time", "1970-01-01T00:00:00+00:00")),
+                    wall_time=datetime.fromisoformat(
+                        data.get("wall_time", "1970-01-01T00:00:00+00:00")
+                    ),
                     decoded=data.get("decoded"),
                     crc_valid=data.get("crc_valid"),
                     notes=data.get("notes"),
@@ -33,28 +35,38 @@ def read_capture(path: Path) -> Iterator[CapturedPacket]:
                 raise ValueError(f"Invalid capture record at line {line_num}: {e}") from e
 
 
-def export_csv(path: Path, output_path: Optional[Path] = None) -> str:
+def export_csv(path: Path, output_path: Path | None = None) -> str:
     """Export a capture file to CSV format."""
     import csv
     import io
 
     buf = io.StringIO()
     writer = csv.writer(buf)
-    writer.writerow([
-        "timestamp", "wall_time", "interface", "direction",
-        "length", "raw_hex", "crc_valid", "notes",
-    ])
+    writer.writerow(
+        [
+            "timestamp",
+            "wall_time",
+            "interface",
+            "direction",
+            "length",
+            "raw_hex",
+            "crc_valid",
+            "notes",
+        ]
+    )
     for packet in read_capture(path):
-        writer.writerow([
-            packet.timestamp,
-            packet.wall_time.isoformat(),
-            packet.interface,
-            packet.direction,
-            len(packet.raw),
-            packet.raw.hex(" ").upper(),
-            packet.crc_valid,
-            packet.notes or "",
-        ])
+        writer.writerow(
+            [
+                packet.timestamp,
+                packet.wall_time.isoformat(),
+                packet.interface,
+                packet.direction,
+                len(packet.raw),
+                packet.raw.hex(" ").upper(),
+                packet.crc_valid,
+                packet.notes or "",
+            ]
+        )
 
     csv_text = buf.getvalue()
     if output_path:

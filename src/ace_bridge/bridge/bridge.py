@@ -22,12 +22,9 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from pathlib import Path
-from typing import Optional
-import time
 
 from ace_bridge.config.schema import BridgeFullConfig
-from ace_bridge.models.state import BridgeStatus, BridgeState
+from ace_bridge.models.state import BridgeState, BridgeStatus
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +66,9 @@ class Bridge:
         try:
             while self._running:
                 await asyncio.sleep(1.0)
-                logger.debug("Bridge simulate heartbeat (uptime=%.0fs)", self._status.uptime_seconds)
+                logger.debug(
+                    "Bridge simulate heartbeat (uptime=%.0fs)", self._status.uptime_seconds
+                )
         except asyncio.CancelledError:
             pass
         finally:
@@ -89,7 +88,7 @@ class Bridge:
             "Real bridge operation not yet implemented. "
             "Hardware drivers must be implemented first. "
             "Run with --simulate for testing. "
-            "See docs/Roadmap.md milestones 1–9."
+            "See docs/Roadmap.md milestones 1-9."
         )
 
     async def stop(self) -> None:

@@ -20,18 +20,17 @@ from __future__ import annotations
 import asyncio
 import logging
 from pathlib import Path
-from typing import Optional
 
 import typer
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
+from rich.table import Table
 
-from ace_bridge.config.loader import load_config
 from ace_bridge.bridge.bridge import Bridge
+from ace_bridge.config.loader import load_config
 from ace_bridge.logging.setup import setup_logging
-from ace_bridge.utils.hex_dump import hex_dump, parse_hex_str
 from ace_bridge.utils.crc import try_all_crcs
+from ace_bridge.utils.hex_dump import hex_dump, parse_hex_str
 
 app = typer.Typer(
     name="bridge",
@@ -44,11 +43,11 @@ logger = logging.getLogger(__name__)
 
 @app.command()
 def start(
-    config: Optional[Path] = typer.Option(None, "--config", "-c", help="YAML config file"),
+    config: Path | None = typer.Option(None, "--config", "-c", help="YAML config file"),
     simulate: bool = typer.Option(False, "--simulate", help="Run in simulation mode (no hardware)"),
     log_level: str = typer.Option("INFO", "--log-level", help="Log level"),
     trace_packets: bool = typer.Option(False, "--trace-packets", help="Log every raw packet"),
-    read_only: bool = typer.Option(True, "--read-only/--no-read-only", help="Read-only mode (no TX)"),
+    read_only: bool = typer.Option(True, "--read-only/--no-read-only", help="Read-only (no TX)"),
 ) -> None:
     """Start the ACE Bridge.
 
@@ -65,11 +64,13 @@ def start(
     if not read_only:
         cfg.bridge.read_only = False
 
-    console.print(Panel(
-        f"[bold green]ACE Bridge starting[/]\n"
-        f"simulate={cfg.bridge.simulate}  read_only={cfg.bridge.read_only}",
-        title="ACE Bridge",
-    ))
+    console.print(
+        Panel(
+            f"[bold green]ACE Bridge starting[/]\n"
+            f"simulate={cfg.bridge.simulate}  read_only={cfg.bridge.read_only}",
+            title="ACE Bridge",
+        )
+    )
 
     bridge = Bridge(cfg)
 
@@ -83,7 +84,7 @@ def start(
 def sniff_rs485(
     port: str = typer.Option("/dev/ttyAMA0", "--port", "-p", help="RS485 serial port"),
     baud: int = typer.Option(115200, "--baud", "-b", help="Baud rate (⚠️ unknown — try multiple)"),
-    output: Optional[Path] = typer.Option(None, "--output", "-o", help="Save to capture file"),
+    output: Path | None = typer.Option(None, "--output", "-o", help="Save to capture file"),
     log_level: str = typer.Option("INFO", "--log-level"),
 ) -> None:
     """Sniff RS485 traffic and print hex dumps.
@@ -109,8 +110,8 @@ def sniff_rs485(
 
 @app.command(name="sniff-usb")
 def sniff_usb(
-    vid: Optional[str] = typer.Option(None, "--vid", help="USB Vendor ID (hex, e.g. 0x1234)"),
-    pid: Optional[str] = typer.Option(None, "--pid", help="USB Product ID (hex)"),
+    vid: str | None = typer.Option(None, "--vid", help="USB Vendor ID (hex, e.g. 0x1234)"),
+    pid: str | None = typer.Option(None, "--pid", help="USB Product ID (hex)"),
     log_level: str = typer.Option("INFO", "--log-level"),
 ) -> None:
     """Sniff USB traffic from/to the ACE Pro.
@@ -147,11 +148,11 @@ def inspect_usb(
 def _inspect_usb() -> None:
     """Internal implementation of USB device inspection."""
     try:
-        import usb.core  # type: ignore[import]
-        import usb.util  # type: ignore[import]
-    except ImportError:
+        import usb.core  # type: ignore[import-untyped]
+        import usb.util  # type: ignore[import-untyped]
+    except ImportError as exc:
         console.print("[red]pyusb not installed. Run: pip install pyusb[/]")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from exc
 
     devices = list(usb.core.find(find_all=True))
     if not devices:
@@ -191,9 +192,9 @@ def _inspect_usb() -> None:
 @app.command()
 def decode(
     input: Path = typer.Argument(..., help="Capture file (.jsonl)"),
-    output: Optional[str] = typer.Option(None, "--output", help="Output format: json, csv, hex"),
-    interface: Optional[str] = typer.Option(None, "--interface", "-i", help="Filter: rs485 or usb"),
-    direction: Optional[str] = typer.Option(None, "--direction", "-d", help="Filter: rx or tx"),
+    output: str | None = typer.Option(None, "--output", help="Output format: json, csv, hex"),
+    interface: str | None = typer.Option(None, "--interface", "-i", help="Filter: rs485 or usb"),
+    direction: str | None = typer.Option(None, "--direction", "-d", help="Filter: rx or tx"),
 ) -> None:
     """Decode and display a capture file.
 
@@ -212,7 +213,8 @@ def decode(
             continue
         if direction and packet.direction != direction:
             continue
-        label = f"[{packet.interface.upper()} {packet.direction.upper()}] {packet.wall_time.strftime('%H:%M:%S.%f')}"
+        ts = packet.wall_time.strftime("%H:%M:%S.%f")
+        label = f"[{packet.interface.upper()} {packet.direction.upper()}] {ts}"
         console.print(f"\n[bold]{label}[/]")
         console.print(hex_dump(packet.raw, label=None))
         count += 1
@@ -232,15 +234,15 @@ def decode_hex(
         data = parse_hex_str(hex_string)
     except ValueError as e:
         console.print(f"[red]Invalid hex string: {e}[/]")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
     console.print(hex_dump(data, label=f"Input ({len(data)} bytes)"))
 
-    # Show all CRC candidates — helpful for identifying which algorithm is in use
+    # Show all CRC candidates - helpful for identifying which algorithm is in use
     if len(data) >= 2:
-        # Assume last 1–2 bytes are CRC; compute over remaining bytes
+        # Assume last 1-2 bytes are CRC; compute over remaining bytes
         payload_1 = data[:-1]
-        payload_2 = data[:-2]
+        data[:-2]
 
         table = Table(title="CRC Candidates (last byte)", show_lines=True)
         table.add_column("Algorithm")
@@ -265,7 +267,7 @@ def capture(
     Saves to captures/<timestamp>.jsonl
     """
     setup_logging(level=log_level)
-    # TODO: Implement once RS485 and USB sniff are working (milestones 1–2)
+    # TODO: Implement once RS485 and USB sniff are working (milestones 1-2)
     console.print("[red]Simultaneous capture not yet implemented. See docs/Roadmap.md.[/]")
     raise typer.Exit(code=1)
 
@@ -273,7 +275,7 @@ def capture(
 @app.command()
 def replay(
     input: Path = typer.Argument(..., help="Capture file to replay"),
-    simulate: bool = typer.Option(True, "--simulate/--real", help="Replay against simulator or real hardware"),
+    simulate: bool = typer.Option(True, "--simulate/--real", help="Use simulator or real hardware"),
     log_level: str = typer.Option("INFO", "--log-level"),
 ) -> None:
     """Replay a capture file for regression testing.
@@ -321,7 +323,7 @@ def discover(
 
 @app.command()
 def simulate(
-    scenario: str = typer.Option("idle", "--scenario", "-s", help="Scenario: idle, load, unload, error"),
+    scenario: str = typer.Option("idle", "--scenario", "-s", help="Scenario name"),
     log_level: str = typer.Option("INFO", "--log-level"),
 ) -> None:
     """Run bridge in simulation mode with a scripted scenario.
@@ -331,7 +333,9 @@ def simulate(
     setup_logging(level=log_level)
     console.print(f"[cyan]Running simulation scenario: {scenario}[/]")
     # TODO: Implement scenario runner (milestone 7)
-    console.print("[yellow]Simulation scenarios not yet implemented. See docs/Roadmap.md milestone 7.[/]")
+    console.print(
+        "[yellow]Simulation scenarios not yet implemented. See docs/Roadmap.md milestone 7.[/]"
+    )
     raise typer.Exit(code=1)
 
 

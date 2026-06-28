@@ -17,10 +17,8 @@ NOT responsible for:
 
 from __future__ import annotations
 
-import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -36,11 +34,11 @@ class USBConfig:
     ⚠️ UNKNOWN: All values must be filled from `lsusb -v` output.
     """
 
-    vid: int = 0x0000              # ⚠️ Unknown — run lsusb with ACE Pro connected
-    pid: int = 0x0000              # ⚠️ Unknown
-    endpoint_in: int = 0x81        # ⚠️ Unknown — typical bulk IN address
-    endpoint_out: int = 0x01       # ⚠️ Unknown — typical bulk OUT address
-    interface: int = 0             # ⚠️ Unknown — usually 0
+    vid: int = 0x0000  # ⚠️ Unknown — run lsusb with ACE Pro connected
+    pid: int = 0x0000  # ⚠️ Unknown
+    endpoint_in: int = 0x81  # ⚠️ Unknown — typical bulk IN address
+    endpoint_out: int = 0x01  # ⚠️ Unknown — typical bulk OUT address
+    interface: int = 0  # ⚠️ Unknown — usually 0
     read_timeout_ms: int = 100
     write_timeout_ms: int = 1000
 
@@ -59,11 +57,11 @@ class USBDriver:
 
     def __init__(self, config: USBConfig) -> None:
         self._config = config
-        self._device: Optional[object] = None  # usb.core.Device once VID/PID known
+        self._device: object | None = None  # usb.core.Device once VID/PID known
         self._rx_count = 0
         self._tx_count = 0
 
-    async def __aenter__(self) -> "USBDriver":
+    async def __aenter__(self) -> USBDriver:
         await self.open()
         return self
 
@@ -125,7 +123,8 @@ class USBDriver:
         This works without knowing the ACE Pro VID/PID in advance.
         """
         try:
-            import usb.core  # type: ignore[import]
+            import usb.core  # type: ignore[import-untyped]
+
             devices = usb.core.find(find_all=True)
             return [{"vid": d.idVendor, "pid": d.idProduct} for d in devices]
         except ImportError:

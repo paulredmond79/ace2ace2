@@ -22,16 +22,16 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Optional, Callable, Awaitable
+from collections.abc import Awaitable, Callable
 
 from ace_bridge.models.commands import AbstractCommand, UnknownCommand
-from ace_bridge.models.state import BridgeStatus, BridgeState, DeviceState
-from ace_bridge.protocol.ace2.packets import ACE2Packet, ACE2PacketType
+from ace_bridge.models.state import BridgeStatus
+from ace_bridge.protocol.ace2.packets import ACE2Packet
 
 logger = logging.getLogger(__name__)
 
 # Callback type: receives an abstract command, returns an optional response command
-CommandHandler = Callable[[AbstractCommand], Awaitable[Optional[AbstractCommand]]]
+CommandHandler = Callable[[AbstractCommand], Awaitable[AbstractCommand | None]]
 
 
 class ACE2Emulator:
@@ -52,7 +52,7 @@ class ACE2Emulator:
         self,
         address: int,  # RS485 bus address for this emulated unit — ⚠️ Unknown value
         status: BridgeStatus,
-        command_handler: Optional[CommandHandler] = None,
+        command_handler: CommandHandler | None = None,
     ) -> None:
         self._address = address
         self._status = status
@@ -60,23 +60,22 @@ class ACE2Emulator:
         self._running = False
         self._packet_queue: asyncio.Queue[ACE2Packet] = asyncio.Queue()
 
-    async def handle_packet(self, packet: ACE2Packet) -> Optional[bytes]:
+    async def handle_packet(self, packet: ACE2Packet) -> bytes | None:
         """Process a received packet and return the encoded response (if any).
 
         ⚠️ STUB: Cannot implement response logic until packet format and command
         set are known from capture. See docs/Unknowns.md RS-5.
         """
         logger.debug(
-            "Emulator received packet: type=%s address=0x%02X payload=%s",
-            packet.packet_type,
-            packet.address,
+            "Emulator received packet: cmd=%s flags=0x%02X payload=%s",
+            packet.command,
+            packet.flags,
             packet.payload.hex(" ").upper(),
         )
 
         if not packet.crc_valid:
             logger.warning(
-                "CRC validation failed on received packet. "
-                "Expected=0x%s Computed=0x%s raw=%s",
+                "CRC validation failed on received packet. " "Expected=0x%s Computed=0x%s raw=%s",
                 f"{packet.crc_expected:04X}" if packet.crc_expected is not None else "??",
                 f"{packet.crc_computed:04X}" if packet.crc_computed is not None else "??",
                 packet.raw.hex(" ").upper(),
@@ -103,9 +102,7 @@ class ACE2Emulator:
         # For now, return UnknownCommand with raw bytes so the translator can log it
         return UnknownCommand(raw_bytes=packet.raw)
 
-    def _command_to_response_bytes(
-        self, request: ACE2Packet, response: AbstractCommand
-    ) -> bytes:
+    def _command_to_response_bytes(self, request: ACE2Packet, response: AbstractCommand) -> bytes:
         """Encode an abstract command response into ACE 2 Pro packet bytes.
 
         ⚠️ STUB: Requires knowledge of packet encoding.

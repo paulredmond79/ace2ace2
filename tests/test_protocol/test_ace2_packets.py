@@ -5,20 +5,20 @@ Frame format: 0xFF 0xAA + FLAGS + SEQ(2) + CMD(1) + LEN(1) + proto_payload + CRC
 """
 
 import struct
+
 import pytest
 
 from ace_bridge.protocol.ace2.packets import (
-    FRAME_HEADER,
-    FRAME_FOOTER,
     FLAGS_REQUEST,
     FLAGS_RESPONSE,
+    FRAME_FOOTER,
+    FRAME_HEADER,
     ACE2Command,
     ACE2SlotState,
-    ACE2Packet,
     FrameError,
     decode_frame,
-    encode_frame,
     encode_discover_request,
+    encode_frame,
     find_frames,
 )
 from ace_bridge.utils.crc import crc16_kermit
@@ -97,7 +97,9 @@ class TestDecodeFrame:
 
     def test_decode_with_payload(self) -> None:
         payload = b"\x08\x01\x10\x00"  # placeholder proto bytes
-        raw = _build_raw_frame(FLAGS_REQUEST, seq=1, cmd=ACE2Command.FEED_OR_ROLLBACK, payload=payload)
+        raw = _build_raw_frame(
+            FLAGS_REQUEST, seq=1, cmd=ACE2Command.FEED_OR_ROLLBACK, payload=payload
+        )
         packet = decode_frame(raw)
         assert packet.crc_valid
         assert packet.payload == payload
@@ -110,11 +112,11 @@ class TestDecodeFrame:
 
     def test_decode_too_short_raises(self) -> None:
         with pytest.raises(FrameError, match="too short"):
-            decode_frame(b"\xFF\xAA\x00")
+            decode_frame(b"\xff\xaa\x00")
 
     def test_decode_bad_header_raises(self) -> None:
         with pytest.raises(FrameError, match="Invalid header"):
-            decode_frame(b"\xAA\xFF\x00\x00\x00\x06\x00\x00\x00\xFE")
+            decode_frame(b"\xaa\xff\x00\x00\x00\x06\x00\x00\x00\xfe")
 
     def test_decode_bad_footer_raises(self) -> None:
         raw = bytearray(_build_raw_frame(FLAGS_REQUEST, seq=0, cmd=ACE2Command.GET_STATUS))
