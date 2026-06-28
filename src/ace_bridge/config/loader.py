@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import yaml
 
@@ -13,7 +12,7 @@ from ace_bridge.config.schema import BridgeFullConfig
 logger = logging.getLogger(__name__)
 
 
-def load_config(path: Optional[Path] = None) -> BridgeFullConfig:
+def load_config(path: Path | None = None) -> BridgeFullConfig:
     """Load and validate configuration from a YAML file.
 
     If no path is given, returns default configuration with safe defaults

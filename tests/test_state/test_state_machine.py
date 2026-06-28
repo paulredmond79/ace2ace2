@@ -3,13 +3,12 @@
 import pytest
 
 from ace_bridge.models.state import (
+    BridgeState,
+    BridgeStatus,
     DeviceState,
-    SlotState,
-    FilamentState,
     DryerState,
     DryerStatus,
-    BridgeStatus,
-    BridgeState,
+    FilamentState,
 )
 
 
@@ -48,6 +47,7 @@ def test_dryer_update() -> None:
 
 def test_bridge_status_uptime_increases() -> None:
     import time
+
     status = BridgeStatus()
     time.sleep(0.01)
     assert status.uptime_seconds > 0.0

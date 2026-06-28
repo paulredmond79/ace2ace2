@@ -3,8 +3,8 @@
 Translates between printer-facing abstract commands and ACE Pro-facing abstract commands.
 
 The key responsibility is slot remapping:
-- Printer addresses slots 5–8 (or similar) on the bridge unit
-- ACE Pro has slots 1–4
+- Printer addresses slots 5-8 (or similar) on the bridge unit
+- ACE Pro has slots 1-4
 - The translator maps printer slot N → ACE Pro slot N - offset
 
 The translator is the ONLY place where slot number remapping happens.
@@ -18,17 +18,16 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import Optional
 
 from ace_bridge.models.commands import (
     AbstractCommand,
     CommandType,
-    LoadFilamentCommand,
-    UnloadFilamentCommand,
     FeedFilamentCommand,
-    RetractFilamentCommand,
     GetSlotStatusCommand,
+    LoadFilamentCommand,
+    RetractFilamentCommand,
     UnknownCommand,
+    UnloadFilamentCommand,
 )
 from ace_bridge.models.state import DeviceState
 
@@ -64,8 +63,8 @@ class SlotMapping:
 class CommandTranslator:
     """Translates abstract commands between printer-space and device-space.
 
-    Printer-space: slots numbered as the printer understands them (e.g. 5–8)
-    Device-space: slots numbered as ACE Pro understands them (1–4)
+    Printer-space: slots numbered as the printer understands them (e.g. 5-8)
+    Device-space: slots numbered as ACE Pro understands them (1-4)
 
     The translator also propagates state from the ACE Pro driver back to the
     emulator so the emulator can report accurate status to the printer.
@@ -75,7 +74,7 @@ class CommandTranslator:
         self._mapping = slot_mapping
         self._device_state = device_state
 
-    def translate_to_device(self, command: AbstractCommand) -> Optional[AbstractCommand]:
+    def translate_to_device(self, command: AbstractCommand) -> AbstractCommand | None:
         """Translate a printer-facing command to a device-facing command.
 
         Returns None if the command requires no action on the ACE Pro
@@ -112,7 +111,12 @@ class CommandTranslator:
                 device_slot = self._mapping.printer_to_device(command.slot)
                 return GetSlotStatusCommand(slot=device_slot)
 
-            case CommandType.PING | CommandType.GET_STATUS | CommandType.GET_TEMPERATURE | CommandType.GET_HUMIDITY:
+            case (
+                CommandType.PING
+                | CommandType.GET_STATUS
+                | CommandType.GET_TEMPERATURE
+                | CommandType.GET_HUMIDITY
+            ):
                 # Pass through without slot translation
                 return command
 

@@ -9,21 +9,20 @@ protocol capture reveals what state the ACE 2 Pro maintains and reports.
 
 from __future__ import annotations
 
-from enum import Enum, auto
-from dataclasses import dataclass, field
-from typing import Optional
 import time
+from dataclasses import dataclass, field
+from enum import Enum, auto
 
 
 class FilamentState(Enum):
     """State of a single filament slot."""
 
     UNKNOWN = auto()
-    EMPTY = auto()       # No filament present
-    LOADED = auto()      # Filament present and threaded
-    LOADING = auto()     # Load operation in progress
-    UNLOADING = auto()   # Unload operation in progress
-    ERROR = auto()       # Sensor/motor error on this slot
+    EMPTY = auto()  # No filament present
+    LOADED = auto()  # Filament present and threaded
+    LOADING = auto()  # Load operation in progress
+    UNLOADING = auto()  # Unload operation in progress
+    ERROR = auto()  # Sensor/motor error on this slot
 
 
 class DryerState(Enum):
@@ -31,9 +30,9 @@ class DryerState(Enum):
 
     UNKNOWN = auto()
     OFF = auto()
-    HEATING = auto()     # Ramping up to target temp
-    DRYING = auto()      # At or near target temp
-    COOLING = auto()     # Cooling down
+    HEATING = auto()  # Ramping up to target temp
+    DRYING = auto()  # At or near target temp
+    COOLING = auto()  # Cooling down
     ERROR = auto()
 
 
@@ -56,8 +55,8 @@ class SlotState:
 
     slot_number: int
     filament_state: FilamentState = FilamentState.UNKNOWN
-    filament_type: Optional[str] = None    # e.g. "PLA", "PETG" — ⚠️ unknown if reported
-    filament_colour: Optional[str] = None  # ⚠️ unknown if reported
+    filament_type: str | None = None  # e.g. "PLA", "PETG" — ⚠️ unknown if reported
+    filament_colour: str | None = None  # ⚠️ unknown if reported
     last_updated: float = field(default_factory=time.monotonic)
 
     def update(self, state: FilamentState) -> None:
@@ -73,17 +72,17 @@ class DryerStatus:
     """
 
     state: DryerState = DryerState.UNKNOWN
-    current_temp_c: Optional[float] = None
-    target_temp_c: Optional[float] = None
-    humidity_pct: Optional[float] = None
+    current_temp_c: float | None = None
+    target_temp_c: float | None = None
+    humidity_pct: float | None = None
     last_updated: float = field(default_factory=time.monotonic)
 
     def update(
         self,
         state: DryerState,
-        current_temp: Optional[float] = None,
-        target_temp: Optional[float] = None,
-        humidity: Optional[float] = None,
+        current_temp: float | None = None,
+        target_temp: float | None = None,
+        humidity: float | None = None,
     ) -> None:
         self.state = state
         if current_temp is not None:
@@ -107,9 +106,9 @@ class DeviceState:
     slots: dict[int, SlotState] = field(default_factory=dict)
     dryer: DryerStatus = field(default_factory=DryerStatus)
     is_busy: bool = False
-    error_code: Optional[int] = None
-    firmware_version: Optional[str] = None  # ⚠️ Unknown if reported
-    last_heartbeat: Optional[float] = None
+    error_code: int | None = None
+    firmware_version: str | None = None  # ⚠️ Unknown if reported
+    last_heartbeat: float | None = None
 
     def __post_init__(self) -> None:
         if not self.slots:
@@ -118,7 +117,7 @@ class DeviceState:
 
     def slot(self, n: int) -> SlotState:
         if n not in self.slots:
-            raise ValueError(f"Slot {n} does not exist (valid: 1–{self.num_slots})")
+            raise ValueError(f"Slot {n} does not exist (valid: 1-{self.num_slots})")
         return self.slots[n]
 
 

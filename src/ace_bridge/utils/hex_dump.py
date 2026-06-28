@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Optional
 
-
-def hex_dump(data: bytes, width: int = 16, offset: int = 0, label: Optional[str] = None) -> str:
+def hex_dump(data: bytes, width: int = 16, offset: int = 0, label: str | None = None) -> str:
     """Format bytes as a readable hex dump with ASCII sidebar.
 
     Example output:

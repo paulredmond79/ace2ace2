@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -10,11 +9,11 @@ class PrinterConfig(BaseModel):
     """RS485 configuration for the upstream connection (towards printer/ACE 2 Pro)."""
 
     rs485_port: str = "/dev/ttyAMA0"
-    baud_rate: int = 115200       # ⚠️ Unknown — placeholder
-    parity: str = "N"             # ⚠️ Unknown — N, E, or O
-    stop_bits: int = 1            # ⚠️ Unknown
-    de_re_pin: Optional[int] = None  # GPIO BCM pin for direction control
-    address: int = 0x02           # ⚠️ Unknown — RS485 address for this bridge unit
+    baud_rate: int = 115200  # ⚠️ Unknown — placeholder
+    parity: str = "N"  # ⚠️ Unknown — N, E, or O
+    stop_bits: int = 1  # ⚠️ Unknown
+    de_re_pin: int | None = None  # GPIO BCM pin for direction control
+    address: int = 0x02  # ⚠️ Unknown — RS485 address for this bridge unit
 
     @field_validator("parity")
     @classmethod
@@ -27,11 +26,11 @@ class PrinterConfig(BaseModel):
 class ACEProConfig(BaseModel):
     """USB configuration for the downstream ACE Pro device."""
 
-    usb_vid: int = 0x0000         # ⚠️ Unknown — run lsusb to find
-    usb_pid: int = 0x0000         # ⚠️ Unknown
-    usb_endpoint_in: int = 0x81   # ⚠️ Unknown
+    usb_vid: int = 0x0000  # ⚠️ Unknown — run lsusb to find
+    usb_pid: int = 0x0000  # ⚠️ Unknown
+    usb_endpoint_in: int = 0x81  # ⚠️ Unknown
     usb_endpoint_out: int = 0x01  # ⚠️ Unknown
-    usb_interface: int = 0        # ⚠️ Unknown
+    usb_interface: int = 0  # ⚠️ Unknown
     read_timeout_ms: int = 100
     write_timeout_ms: int = 1000
 
@@ -50,11 +49,11 @@ class BridgeConfig(BaseModel):
     """Bridge operational settings."""
 
     simulate: bool = False
-    read_only: bool = True       # Safety: default read-only
+    read_only: bool = True  # Safety: default read-only
     capture_enabled: bool = True
     capture_path: str = "captures/"
     log_level: str = "INFO"
-    log_file: Optional[str] = None
+    log_file: str | None = None
     heartbeat_interval_s: float = 1.0  # ⚠️ Unknown — placeholder
     command_timeout_s: float = 5.0
 

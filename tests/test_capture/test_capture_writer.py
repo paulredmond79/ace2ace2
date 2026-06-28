@@ -1,14 +1,13 @@
 """Tests for capture writer and reader."""
 
-import asyncio
 import json
-from pathlib import Path
 import tempfile
+from pathlib import Path
 
 import pytest
 
-from ace_bridge.capture.writer import CaptureWriter, CapturedPacket
 from ace_bridge.capture.reader import read_capture
+from ace_bridge.capture.writer import CapturedPacket, CaptureWriter
 
 
 @pytest.mark.asyncio
@@ -21,7 +20,7 @@ async def test_capture_writer_creates_file() -> None:
             packet = CapturedPacket(
                 interface="rs485",
                 direction="rx",
-                raw=b"\xAA\x01\x04",
+                raw=b"\xaa\x01\x04",
             )
             await writer.write(packet)
 
@@ -68,7 +67,7 @@ async def test_capture_roundtrip() -> None:
         original = CapturedPacket(
             interface="rs485",
             direction="rx",
-            raw=b"\xAA\xBB\xCC",
+            raw=b"\xaa\xbb\xcc",
             notes="test packet",
         )
         async with CaptureWriter(path) as writer:
@@ -78,7 +77,7 @@ async def test_capture_roundtrip() -> None:
         assert len(packets) == 1
         assert packets[0].interface == "rs485"
         assert packets[0].direction == "rx"
-        assert packets[0].raw == b"\xAA\xBB\xCC"
+        assert packets[0].raw == b"\xaa\xbb\xcc"
         assert packets[0].notes == "test packet"
     finally:
         path.unlink(missing_ok=True)

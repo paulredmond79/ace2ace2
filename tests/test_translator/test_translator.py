@@ -3,14 +3,14 @@
 import pytest
 
 from ace_bridge.models.commands import (
-    LoadFilamentCommand,
-    UnloadFilamentCommand,
     FeedFilamentCommand,
+    LoadFilamentCommand,
     PingCommand,
     UnknownCommand,
+    UnloadFilamentCommand,
 )
 from ace_bridge.models.state import DeviceState
-from ace_bridge.translator.translator import SlotMapping, CommandTranslator
+from ace_bridge.translator.translator import CommandTranslator, SlotMapping
 
 
 class TestSlotMapping:
@@ -62,7 +62,7 @@ class TestCommandTranslator:
         assert result is cmd  # Same object, no translation needed
 
     def test_unknown_command_passes_through(self) -> None:
-        cmd = UnknownCommand(raw_bytes=b"\xAA\xBB")
+        cmd = UnknownCommand(raw_bytes=b"\xaa\xbb")
         result = self.translator.translate_to_device(cmd)
         assert isinstance(result, UnknownCommand)
-        assert result.raw_bytes == b"\xAA\xBB"
+        assert result.raw_bytes == b"\xaa\xbb"

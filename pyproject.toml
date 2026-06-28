@@ -55,7 +55,9 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "B", "UP", "ANN", "RUF"]
-ignore = ["ANN101", "ANN102"]
+ignore = [
+    "B008",   # typer.Option/Argument in defaults is the standard Typer pattern
+]
 
 [tool.black]
 line-length = 100

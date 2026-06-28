@@ -1,9 +1,10 @@
 """Shared pytest fixtures for all test modules."""
 
-import pytest
 from pathlib import Path
 
-from ace_bridge.config.schema import BridgeFullConfig, BridgeConfig
+import pytest
+
+from ace_bridge.config.schema import BridgeFullConfig
 
 
 @pytest.fixture

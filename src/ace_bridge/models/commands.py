@@ -11,10 +11,9 @@ Rules:
 
 from __future__ import annotations
 
-from enum import Enum, auto
-from dataclasses import dataclass, field
-from typing import Optional
 import time
+from dataclasses import dataclass, field
+from enum import Enum, auto
 
 
 class CommandType(Enum):
@@ -49,7 +48,7 @@ class AbstractCommand:
 
     command_type: CommandType
     timestamp: float = field(default_factory=time.monotonic)
-    request_id: Optional[int] = None
+    request_id: int | None = None
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -82,7 +81,7 @@ class GetSlotStatusCommand(AbstractCommand):
 class LoadFilamentCommand(AbstractCommand):
     """Load filament from a specific slot.
 
-    slot: printer-facing slot number (1–8, where 5–8 are on the bridged ACE Pro)
+    slot: printer-facing slot number (1-8, where 5-8 are on the bridged ACE Pro)
     """
 
     slot: int
