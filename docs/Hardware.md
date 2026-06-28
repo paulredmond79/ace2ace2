@@ -66,9 +66,17 @@ Pin 4 — GND
 > ⚠️ **IMPORTANT**: The PCB labels "D+" and "D−" refer to RS485 A and B lines, NOT USB
 > D+/D−. These are differential RS485 signals. Connecting them to USB would destroy hardware.
 
-**Molex part number for mating connector (plug):**
-- Housing: `43025-0400` (Micro-Fit 3.0 Plug, 2×2, 4-circuit)
-- Terminals: `43030-0007` (Micro-Fit 3.0 Female Crimp Terminal, 24–28 AWG)
+**Molex part number for mating connector:**
+
+> ⚠️ **HW-1 UNRESOLVED**: The exact mating housing depends on whether the ACE 2 Pro
+> PCB has a plug header (43045 series, male pins) or a receptacle housing (43025 series,
+> female sockets). Verify physically before ordering:
+> - If device has **plug header** (male pins) → cable needs **43025-0400** receptacle housing (female socket contacts 43030-0007)
+> - If device has **receptacle housing** (female sockets) → cable needs **43020-0400** plug housing (male tab contacts 43031-0007)
+
+Assumed configuration (plug header on device, receptacle on cable — most common for PCB connectors):
+- Housing: `43025-0400` (Micro-Fit 3.0 Receptacle, 2×2, 4-circuit)
+- Terminals: `43030-0007` (Micro-Fit 3.0 Female Crimp Terminal, 20–24 AWG)
 
 Connection to USB-RS485 adapter (daisy-chain port → Pi):
 - Pin 1 (RS485 B / D−) → adapter B terminal
@@ -93,7 +101,7 @@ Pin 2 — USB D−
 Pin 3 — USB D+
 Pin 4 — NC       (do not connect)
 Pin 5 — GND
-Pin 6 — VCC      (do NOT connect — ACE Pro is USB bus-powered from Pi)
+Pin 6 — VCC/VBUS (connect to USB-A Pin 1 — provides bus power from Pi to ACE Pro)
 ```
 
 **Molex part number for mating connector (receptacle):**
@@ -127,37 +135,43 @@ Pin 3 (VCC)           — not connected
 ```
 
 **Parts needed:**
-- 1× Molex `43025-0400` housing (2×2 Female plug)
-- 3× Molex `43030-0007` crimp terminals
+- 1× Molex `43025-0400` housing (see mating note above — verify connector type first)
+- 3× Molex `43030-0007` crimp terminals (20–24 AWG)
 - 1× USB-RS485 adapter (CH340 or FTDI-based, with screw terminal block)
-- ~0.5–1 m shielded twisted pair, 24 AWG
+- ~0.5–1 m **3-conductor shielded cable**, 22–24 AWG (e.g. Alpha Wire 5563 or Belden 9533)
 
-Use shielded twisted pair for the RS485 wires. Connect the shield at the ACE 2 Pro
-end only to avoid ground loops.
+Use a 3-conductor shielded cable: separate insulated conductors for A, B, and GND. Do not
+use the shield/drain as the GND conductor — connect the shield at the ACE 2 Pro end only
+for EMI rejection, with GND carried on its own insulated conductor.
 
 ### Cable B: Raspberry Pi → ACE Pro (USB)
 
-The ACE Pro uses an internal Molex Micro-Fit 3.0 Male 2×3 connector rather than a
-standard USB port. A custom cable connects it to the Pi.
+> ⚠️ **HW-2 UNRESOLVED**: The ACE Pro's external chassis connector type has not been
+> physically confirmed. If the chassis exposes a standard USB port (USB-A, Micro-B, etc.),
+> no custom cable is needed — use a standard USB cable instead. Only build this custom
+> Molex cable after confirming the external port is the Molex 2×3 connector. See
+> `docs/Unknowns.md` HW-2.
+
+Assuming the external port is the Molex Micro-Fit 3.0 Male 2×3 connector, build this cable:
 
 ```
 Molex Micro-Fit 3.0 Female 2×3  →  USB-A Male (to Pi USB port)
 
-Pin 2 (USB D−)  ──────────────────  USB-A Pin 2 (D−)
-Pin 3 (USB D+)  ──────────────────  USB-A Pin 3 (D+)
-Pin 5 (GND)     ──────────────────  USB-A Pin 4 (GND)
-Pin 6 (VCC)     — DO NOT CONNECT — USB-A VBUS already powers the device
-Pin 1, Pin 4    — not connected
+Pin 2 (USB D−)       ──────────  USB-A Pin 2 (D−)
+Pin 3 (USB D+)       ──────────  USB-A Pin 3 (D+)
+Pin 5 (GND)          ──────────  USB-A Pin 4 (GND)
+Pin 6 (VCC / VBUS)   ──────────  USB-A Pin 1 (VBUS) — bus power from Pi to ACE Pro
+Pin 1, Pin 4         — not connected
 ```
 
-> ⚠️ **Do not connect Pin 6 (VCC) to USB-A VBUS.** The ACE Pro is bus-powered by
-> the Pi's USB port. Bridging a second VCC supply will cause a short or over-voltage.
+Pin 6 (VCC) is the VBUS input that powers the ACE Pro from the Pi's USB port. It must
+be connected. Without it the device receives no power and will not enumerate.
 
-Use 26 AWG or thicker for D+ and D−. Keep cable length under 2 m for USB 2.0 signal integrity.
+Use 24 AWG wire for all conductors. Keep cable length under 2 m for USB 2.0 signal integrity.
 
 **Parts needed:**
 - 1× Molex `43025-0600` housing (2×3 Female receptacle)
-- 3× Molex `43030-0007` crimp terminals
+- 4× Molex `43030-0007` crimp terminals, 20–24 AWG (4 wires: D−, D+, GND, VBUS)
 - 1× USB-A Male plug with bare wire leads (or cut a USB-A cable and strip the end)
 
 ---
