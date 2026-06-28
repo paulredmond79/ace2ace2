@@ -30,6 +30,11 @@ unexpected printer behaviour during a print job.
 
 - [ ] Power off ALL devices (printer, ACE 2 Pro, ACE Pro, Raspberry Pi)
 - [ ] Discharge any capacitors (wait 30 seconds after power-off)
+- [ ] **Verify ACE 2 Pro connector pinout** against `docs/Hardware.md` before inserting
+      any cable — probe Pin 2 (expected RS485 A) and Pin 1 (expected RS485 B) against
+      Pin 4 (GND) to confirm orientation and signal type
+- [ ] **Verify ACE Pro connector pinout** — confirm Pin 2 = D−, Pin 3 = D+, Pin 5 = GND
+      before completing custom cable (see `docs/Hardware.md` for full pinout)
 - [ ] Measure RS485 A line to GND with multimeter (AC and DC)
 - [ ] Measure RS485 B line to GND with multimeter (AC and DC)
 - [ ] Measure RS485 A to B differential voltage

@@ -77,13 +77,19 @@ can be fully implemented. Items are removed when resolved.
 - **Unknown**: Molex Micro-Fit 3.0 2×2 is from decay71/multiACE README; needs physical verification
 - **How to discover**: Inspect ACE 2 Pro hardware with calipers/reference
 - **Blocks**: Cable ordering for BOM
-- **Status**: High-confidence hypothesis; needs physical confirmation
+- **Status**: High-confidence hypothesis; needs physical confirmation before ordering parts
+- **Documented**: Pinout and Molex part numbers recorded in `docs/Hardware.md`
 
-### HW-2: ACE Pro USB External Port Type
-- **Unknown**: The external USB port type on ACE Pro chassis (USB-A? USB-B? Micro? Mini?)
-- **How to discover**: Physical inspection
-- **Blocks**: Cable selection
-- **Status**: Not started
+### HW-2: ACE Pro External Connector / Port Type
+- **Unknown**: Whether the ACE Pro exposes the Molex Micro-Fit 3.0 2×3 PCB connector
+  externally, or has a standard USB receptacle (USB-A, Micro-B, etc.) on the chassis.
+  The Molex 6-pin is confirmed as the internal PCB connector from printers-for-people
+  hardware photos; the external chassis interface needs physical inspection.
+- **How to discover**: Physical inspection of ACE Pro unit
+- **Blocks**: Finaling custom cable design — if external port is standard USB then no
+  custom Molex cable is needed
+- **Status**: Internal PCB pinout known (Molex 2×3, see `docs/Hardware.md`); external
+  chassis connector unconfirmed
 
 ### HW-3: RS485 Bus Voltage
 - **Unknown**: Signal voltage on RS485 bus (5V or 3.3V differential)
