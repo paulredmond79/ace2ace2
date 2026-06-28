@@ -13,9 +13,9 @@ Complete parts list for building one ACE Bridge unit.
 
 | # | Connection | Cable | Action |
 |---|-----------|-------|--------|
-| 1 | Printer → ACE 2 Pro (front port) | Factory RS485 cable | None — already provided |
-| 2 | ACE 2 Pro daisy-chain (back) → Pi | Custom Molex 2×2 pigtail + USB-RS485 adapter | Build |
-| 3 | Pi → ACE Pro | Custom Molex 2×3 → USB-A cable | Build |
+| 1 | Printer (4-pin) → ACE 2 Pro bottom-left (6-pin) | "K3/K3M/S1 Signal Cable" (factory supplied with ACE 2 Pro) | None |
+| 2 | ACE 2 Pro daisy-chain back port → Pi USB | Custom Molex pigtail + USB-RS485 adapter | Build — **confirm HW-1 first** |
+| 3 | Pi USB → ACE Pro (Molex 2×3) | Custom Molex 2×3 → USB-A cable | Build |
 
 ---
 
@@ -49,16 +49,29 @@ connect the Molex pigtail wires directly to the A, B, and GND terminals.
 
 ### Molex Pigtail (ACE 2 Pro Daisy-Chain End)
 
-> ⚠️ **HW-1**: Verify the ACE 2 Pro connector type before ordering the Molex housing.
-> If the device PCB has a **plug header** (male pins), use `43025-0400` (receptacle, female
-> socket contacts). If it has a **receptacle housing** (female sockets), use `43020-0400`
-> (plug, male tab contacts, with `43031-0007` terminals instead). See `docs/Hardware.md`.
+**Confirmed (physical inspection, 2026-06-28):** The daisy-chain port on the back of the
+ACE 2 Pro is the **bottom connector** on the back panel — Molex Micro-Fit 3.0 **4-pin (2×2)**.
+The back panel also has an upper 6-pin (2×3) connector whose purpose is unknown (HW-6) —
+do not connect to it.
+
+The cable uses the same **4-pin → 6-pin** format as the factory signal cable. The 4-pin end
+plugs into the ACE 2 Pro daisy-chain port; the 6-pin end terminates at the USB-RS485 adapter
+screw terminals (A, B, GND). The official Anycubic cascade kit provides a matching
+"signal adapter cable" — use it if available.
+
+> ⚠️ **Connector orientation**: The cable housing must be the **opposite** gender of the device
+> port — connectors mate by pairing plug to receptacle. Confirm whether the device has a plug
+> (pin header) or receptacle (socket) before ordering:
+> - Device port = **receptacle** (socket) → cable needs a **plug** housing: `43020-0400` with
+>   male tab contacts `43031-0007`
+> - Device port = **plug** (pin header) → cable needs a **receptacle** housing: `43025-0400`
+>   with female crimp contacts `43030-0007`
 
 | Qty | Item | Molex Part | Source | Est. Unit Cost |
 |-----|------|-----------|--------|---------------|
-| 1 | Molex Micro-Fit 3.0 housing, 2×2 (4-circuit) — see note above | **43025-0400** (if device has plug header) | Digi-Key / Molex | ~$0.60 |
-| 3 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
-| ~0.5 m | 3-conductor shielded cable, 22–24 AWG | Alpha Wire 5563 or Belden 9533 (not 9501 — that is 2-conductor only) | Digi-Key / local | ~$2–3 |
+| 1 | Molex Micro-Fit 3.0 4-pin housing (confirm orientation — see note above) | **43020-0400** plug (if device is receptacle) or **43025-0400** receptacle (if device is plug) | Digi-Key / Molex | ~$0.60 |
+| 3 | Molex Micro-Fit 3.0 crimp contacts — female `43030-0007` (with 43025) or male tab `43031-0007` (with 43020) | **43030-0007** or **43031-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
+| ~0.5 m | 3-conductor shielded cable, 22–24 AWG | Alpha Wire 5563 or Belden 9533 (not 9501 — 2-conductor only) | Digi-Key / local | ~$2–3 |
 
 Wire the pigtail as follows (connect free ends to USB-RS485 adapter terminals):
 
@@ -75,17 +88,13 @@ Connect the cable shield at the ACE 2 Pro end only.
 
 ## 3. Cable B: Raspberry Pi → ACE Pro (USB)
 
-> ⚠️ **HW-2 UNRESOLVED**: Only build this cable after physically confirming that the ACE
-> Pro's external chassis port is the Molex 2×3 connector. If the chassis exposes a standard
-> USB receptacle (USB-A, Micro-B, etc.), use a standard USB cable instead. See
-> `docs/Unknowns.md` HW-2.
-
-Assuming the external port is the Molex Micro-Fit 3.0 Male 2×3:
+**Confirmed (physical inspection, 2026-06-28):** The ACE Pro external chassis port is
+the Molex Micro-Fit 3.0 Male 2×3. No standard USB port is present. Build this cable.
 
 | Qty | Item | Molex Part | Source | Est. Unit Cost |
 |-----|------|-----------|--------|---------------|
 | 1 | Molex Micro-Fit 3.0 Receptacle housing, 2×3 (6-circuit) | **43025-0600** | Digi-Key / Molex | ~$0.60 |
-| 4 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$1.00) |
+| 3 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
 | 1 | USB-A Male plug with bare wire leads, or cut USB-A cable | Generic | Amazon / local | ~$1–2 |
 | ~0.5 m | 24 AWG hook-up wire, 4 colours | UL1007 or equivalent | Amazon / local | ~$1 |
 
@@ -96,12 +105,13 @@ Wire as follows:
 | Pin 2 | USB D− | Pin 2 (D−) |
 | Pin 3 | USB D+ | Pin 3 (D+) |
 | Pin 5 | GND | Pin 4 (GND) |
-| Pin 6 | VCC / VBUS | Pin 1 (VBUS) — **must connect** to power the ACE Pro |
+| Pin 6 | VCC | NC — do not connect (see HW-7 in `docs/Unknowns.md`) |
 | Pin 1 | NC | — |
 | Pin 4 | NC | — |
 
-Pin 6 (VCC) is the VBUS input to the ACE Pro. Without it connected to USB-A Pin 1, the
-device receives no power and will not enumerate on the Pi's USB bus.
+> ⚠️ **HW-7 open**: Pin 6 VCC connection is disputed between community sources. Leave it
+> unconnected (the high-confidence source says NC). Do not connect Pin 6 until confirmed
+> on hardware — connecting Pi's 5V to a self-powered device risks hardware damage.
 
 ---
 
@@ -158,10 +168,10 @@ device receives no power and will not enumerate on the Pi's USB bus.
 |------|--------|
 | 2026-06-28 | Revised topology: daisy-chain through ACE 2 Pro back port — no T-junction |
 | 2026-06-28 | Removed Wago connectors; added USB-RS485 adapter as Cable A component |
-| 2026-06-28 | Fixed Cable B: Pin 6 (VCC/VBUS) must connect to USB-A VBUS to power ACE Pro |
+| 2026-06-28 | Reverted Cable B Pin 6 VCC claim: high-confidence source says NC; marked HW-7 open |
 | 2026-06-28 | Fixed Cable A: specify 3-conductor shielded cable; Belden 9501 is 2-conductor only |
 | 2026-06-28 | Fixed crimp terminal AWG: 43030-0007 is 20–24 AWG; changed wire spec to 24 AWG |
 | 2026-06-28 | Added Molex housing mating caveat: 43025 vs 43020 depends on device connector type |
-| — | HW-1: ACE 2 Pro connector type needs physical confirmation before ordering Molex housing |
+| 2026-06-28 | HW-1 resolved: ACE 2 Pro daisy-chain port is bottom 4-pin (2×2) connector on back panel; cable format is 4-pin → 6-pin (same as factory signal cable) |
 | — | HW-2: ACE Pro external chassis connector unconfirmed — Cable B may not be needed |
 | — | HW-3: RS485 bus voltage unconfirmed — transceiver spec may change |

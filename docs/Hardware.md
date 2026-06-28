@@ -1,5 +1,18 @@
 # Hardware Documentation
 
+## Firmware Requirements
+
+Before connecting the ACE 2 Pro for the first time, update the printer firmware:
+
+| Device | Required Firmware | How to Update |
+|--------|------------------|---------------|
+| Kobra 3 V2 | **V1.1.2.5** | OTA update from printer menu |
+| ACE 2 Pro | V1.1.31 (2026-03-06) or later | OTA via printer menu after connection |
+
+Source: Anycubic ACE 2 Pro Multi-Model Compatibility Guide (official). Confidence: High.
+
+---
+
 ## Target Hardware Chain
 
 ```
@@ -28,9 +41,9 @@ Anycubic Kobra 3 V2
 
 | # | From | To | Cable | Action needed |
 |---|------|----|-------|---------------|
-| 1 | Printer | ACE 2 Pro (front port) | Factory RS485 cable | None — use existing |
-| 2 | ACE 2 Pro (daisy-chain port, back) | Raspberry Pi USB | Custom Molex 2×2 pigtail + USB-RS485 adapter | Build custom cable |
-| 3 | Raspberry Pi USB | ACE Pro | Custom Molex 2×3 → USB-A cable | Build custom cable |
+| 1 | Printer (4-pin port) | ACE 2 Pro bottom-left (6-pin port) | "K3/K3M/S1 Signal Cable" (factory supplied with ACE 2 Pro) | None — use existing |
+| 2 | ACE 2 Pro daisy-chain port (back, pin count TBC) | Raspberry Pi USB | Custom Molex pigtail + USB-RS485 adapter | Build — **confirm HW-1 first** |
+| 3 | Raspberry Pi USB | ACE Pro (Molex 2×3 port) | Custom Molex 2×3 → USB-A cable | Build |
 
 The Pi sits at the end of the RS485 daisy-chain. From the printer's perspective it appears
 as a second ACE 2 Pro node on the same RS485 segment.
@@ -43,46 +56,31 @@ as a second ACE 2 Pro node on the same RS485 segment.
 > Pinouts are high-confidence from community research but must be verified with a multimeter
 > before making any connection. See `docs/Safety.md`.
 
-### ACE 2 Pro — Molex Micro-Fit 3.0 Female 2×2 (4-pin)
+### ACE 2 Pro — Connectors
 
-The ACE 2 Pro has two RS485 ports using this connector: one on the front (connected to
-the printer via the factory cable) and one on the back (the daisy-chain port). Both use
-the same **Molex Micro-Fit 3.0 Female housing, 2×2, 4 pins**. You connect to the **back
-(daisy-chain) port** only.
+The ACE 2 Pro has two RS485 ports:
 
-```
-┌───┬───┐   ← Connector face (as fitted to ACE 2 Pro PCB)
-│ 1 │ 2 │
-├───┼───┤
-│ 3 │ 4 │
-└───┴───┘
+**Bottom-left port (printer-facing) — 6-pin Molex Micro-Fit 3.0 2×3:**
+This is where the factory signal cable connects. The cable has a 6-pin end here and a
+4-pin end at the printer. This cable is supplied with the ACE 2 Pro — do not modify it.
 
-Pin 1 — RS485 B  (D−, labelled "D−" on PCB; this is RS485 B-line)
-Pin 2 — RS485 A  (D+, labelled "D+" on PCB; this is RS485 A-line)
-Pin 3 — VCC      (do NOT connect — leave unconnected or confirm voltage first)
-Pin 4 — GND
-```
+Per Anycubic instructions:
+- Insert the **4-pin end** into the printer's base port (latch faces downward)
+- Insert the **6-pin end** into the ACE 2 Pro bottom-left port (latch faces outward)
 
-> ⚠️ **IMPORTANT**: The PCB labels "D+" and "D−" refer to RS485 A and B lines, NOT USB
-> D+/D−. These are differential RS485 signals. Connecting them to USB would destroy hardware.
+**Back panel — two Molex Micro-Fit 3.0 connectors (stacked, HW-1 resolved):**
 
-**Molex part number for mating connector:**
+**Bottom port (4-pin, 2×2) — RS485 daisy-chain, where the Pi connects:**
+This is where Cable A's 4-pin Molex end connects.
+- Mating housing: Molex `43025-0400` receptacle (or `43020-0400` plug — confirm device connector orientation before ordering)
+- Terminals: `43030-0007` female crimp (20–24 AWG) for use with `43025-0400`; or `43031-0007` male tab for use with `43020-0400`
+- Signals: RS485 A (D+), RS485 B (D−), GND, VCC (leave VCC unconnected — HW-3)
 
-> ⚠️ **HW-1 UNRESOLVED**: The exact mating housing depends on whether the ACE 2 Pro
-> PCB has a plug header (43045 series, male pins) or a receptacle housing (43025 series,
-> female sockets). Verify physically before ordering:
-> - If device has **plug header** (male pins) → cable needs **43025-0400** receptacle housing (female socket contacts 43030-0007)
-> - If device has **receptacle housing** (female sockets) → cable needs **43020-0400** plug housing (male tab contacts 43031-0007)
+**Top port (6-pin, 2×3) — purpose unknown (HW-6):**
+Not used in the current bridge design. Do not connect.
 
-Assumed configuration (plug header on device, receptacle on cable — most common for PCB connectors):
-- Housing: `43025-0400` (Micro-Fit 3.0 Receptacle, 2×2, 4-circuit)
-- Terminals: `43030-0007` (Micro-Fit 3.0 Female Crimp Terminal, 20–24 AWG)
-
-Connection to USB-RS485 adapter (daisy-chain port → Pi):
-- Pin 1 (RS485 B / D−) → adapter B terminal
-- Pin 2 (RS485 A / D+) → adapter A terminal
-- Pin 4 (GND) → adapter GND terminal
-- Pin 3 (VCC) — leave unconnected
+> ⚠️ **IMPORTANT**: The ACE 2 Pro PCB labels "D+" and "D−" refer to RS485 A and B lines,
+> NOT USB signals. Connecting them to USB would destroy hardware.
 
 ### ACE Pro — Molex Micro-Fit 3.0 Male 2×3 (6-pin)
 
@@ -101,7 +99,7 @@ Pin 2 — USB D−
 Pin 3 — USB D+
 Pin 4 — NC       (do not connect)
 Pin 5 — GND
-Pin 6 — VCC/VBUS (connect to USB-A Pin 1 — provides bus power from Pi to ACE Pro)
+Pin 6 — VCC (NC — do not connect; see HW-7 in docs/Unknowns.md)
 ```
 
 **Molex part number for mating connector (receptacle):**
@@ -117,26 +115,38 @@ is already provided with the ACE 2 Pro — do not modify it.
 
 ### Cable A: ACE 2 Pro Daisy-Chain → Raspberry Pi (RS485)
 
-This cable connects the **daisy-chain port on the back of the ACE 2 Pro** to a
-**USB-RS485 adapter**, which then plugs into a Pi USB port.
+This cable uses the same **4-pin → 6-pin signal cable format** as the factory signal cable.
+The 4-pin end plugs into the **bottom (daisy-chain) port on the back of the ACE 2 Pro**.
+The 6-pin end connects to the **USB-RS485 adapter** (via its screw terminals or Molex port).
 
 ```
-ACE 2 Pro back port                  USB-RS485 adapter
-Molex Micro-Fit 3.0 Female 2×2       (screw terminals)
+ACE 2 Pro back                    USB-RS485 adapter
+(bottom port)                     (screw terminals / Molex)
+Molex Micro-Fit 3.0 4-pin
 
-Pin 1 (RS485 B / D−)  ─────────────  B terminal
-Pin 2 (RS485 A / D+)  ─────────────  A terminal
-Pin 4 (GND)           ─────────────  GND terminal
+Pin 1 (RS485 B / D−)  ──────────  B terminal
+Pin 2 (RS485 A / D+)  ──────────  A terminal
+Pin 4 (GND)           ──────────  GND terminal
 Pin 3 (VCC)           — not connected
-                                           │
-                                      USB-A plug
-                                           │
-                                    Pi USB port → /dev/ttyUSB0
+                                        │
+                                   USB-A plug
+                                        │
+                              Pi USB port → /dev/ttyUSB0
 ```
+
+Note: the 6-pin end of the cable carries the same 3 active signals (A, B, GND) on the
+equivalent pins. Wire only these 3 conductors to the RS485 adapter's screw terminals.
+
+> The official Anycubic cascade kit includes a "signal adapter cable" (4-pin → 6-pin)
+> and a "USB-to-RS485 cable" with a matching 6-pin Molex connector. If you can obtain
+> the Anycubic accessories, use them. Otherwise build the 4-pin Molex pigtail above
+> and terminate directly at the RS485 adapter's screw terminals.
 
 **Parts needed:**
-- 1× Molex `43025-0400` housing (see mating note above — verify connector type first)
-- 3× Molex `43030-0007` crimp terminals (20–24 AWG)
+- 1× Molex 4-pin housing — confirm device port gender before ordering:
+  - Device port = receptacle (socket) → cable needs **plug** `43020-0400` + `43031-0007` male tab contacts
+  - Device port = plug (pin header) → cable needs **receptacle** `43025-0400` + `43030-0007` female crimp contacts
+- 3× Molex crimp contacts matching your housing choice (`43031-0007` or `43030-0007`), 20–24 AWG
 - 1× USB-RS485 adapter (CH340 or FTDI-based, with screw terminal block)
 - ~0.5–1 m **3-conductor shielded cable**, 22–24 AWG (e.g. Alpha Wire 5563 or Belden 9533)
 
@@ -146,13 +156,16 @@ for EMI rejection, with GND carried on its own insulated conductor.
 
 ### Cable B: Raspberry Pi → ACE Pro (USB)
 
-> ⚠️ **HW-2 UNRESOLVED**: The ACE Pro's external chassis connector type has not been
-> physically confirmed. If the chassis exposes a standard USB port (USB-A, Micro-B, etc.),
-> no custom cable is needed — use a standard USB cable instead. Only build this custom
-> Molex cable after confirming the external port is the Molex 2×3 connector. See
-> `docs/Unknowns.md` HW-2.
+**Confirmed (physical inspection, 2026-06-28):** The ACE Pro back panel exposes the
+Molex Micro-Fit 3.0 Male 2×3 connector externally. There is no standard USB port on
+the chassis — this custom cable is required.
 
-Assuming the external port is the Molex Micro-Fit 3.0 Male 2×3 connector, build this cable:
+> Note: A second Molex 2×2 connector is present on the back panel (lower, below the 2×3).
+> This is the ACE Pro daisy-chain port for linking additional ACE Pro units together.
+> Its protocol and pinout are unknown (HW-4 in `docs/Unknowns.md`). Do not connect to it
+> for the current bridge design — the Pi connects via the 2×3 port above it.
+
+Build this cable to connect the Pi to the ACE Pro:
 
 ```
 Molex Micro-Fit 3.0 Female 2×3  →  USB-A Male (to Pi USB port)
@@ -160,18 +173,19 @@ Molex Micro-Fit 3.0 Female 2×3  →  USB-A Male (to Pi USB port)
 Pin 2 (USB D−)       ──────────  USB-A Pin 2 (D−)
 Pin 3 (USB D+)       ──────────  USB-A Pin 3 (D+)
 Pin 5 (GND)          ──────────  USB-A Pin 4 (GND)
-Pin 6 (VCC / VBUS)   ──────────  USB-A Pin 1 (VBUS) — bus power from Pi to ACE Pro
+Pin 6 (VCC)          — not connected (NC — see HW-7)
 Pin 1, Pin 4         — not connected
 ```
 
-Pin 6 (VCC) is the VBUS input that powers the ACE Pro from the Pi's USB port. It must
-be connected. Without it the device receives no power and will not enumerate.
+> ⚠️ **HW-7 open**: Pin 6 VCC connection is disputed between sources. The high-confidence
+> community source (printers-for-people/ACEResearch) says Pin 6 is NC. Leave it unconnected
+> until confirmed on hardware. See `docs/Unknowns.md` HW-7.
 
 Use 24 AWG wire for all conductors. Keep cable length under 2 m for USB 2.0 signal integrity.
 
 **Parts needed:**
 - 1× Molex `43025-0600` housing (2×3 Female receptacle)
-- 4× Molex `43030-0007` crimp terminals, 20–24 AWG (4 wires: D−, D+, GND, VBUS)
+- 3× Molex `43030-0007` crimp terminals, 20–24 AWG (3 wires: D−, D+, GND)
 - 1× USB-A Male plug with bare wire leads (or cut a USB-A cable and strip the end)
 
 ---
@@ -265,10 +279,10 @@ lsusb -v | grep -A5 "28e9"
 - Do not power Pi from printer USB — current and stability are unknown
 
 ### ACE Pro
-- Powered via USB from the Pi. The standard USB-A port supplies up to 500 mA (USB 2.0)
-  or 900 mA (USB 3.0).
-- The ACE Pro's actual draw is unconfirmed — measure before deploying on a 500 mA port.
-- If draw exceeds 500 mA, use a powered USB hub between Pi and ACE Pro.
+- **Self-powered from mains** (IEC C14 inlet + rocker switch on right back panel). The ACE Pro
+  does not draw power from the Pi's USB port.
+- The USB connection to the Pi carries data only (D−, D+, GND). Pin 6 VCC is left NC per the
+  interim HW-7 stance — do not use a powered USB hub to supply VBUS. See `docs/Unknowns.md` HW-7.
 
 ### Isolation
 
@@ -289,9 +303,9 @@ If not isolated, ensure common GND between Pi and RS485 bus.
 | 1 | USB-RS485 adapter with screw terminals | CH340 or FTDI-based | ~$8–12 |
 | 1 | USB-C power supply | 5V/5A, official Pi supply | ~$10 |
 | 1 | MicroSD card | 32GB+ Class 10 / A1 | ~$8 |
-| 1 | Molex housing 2×2 | `43025-0400` — Cable A (daisy-chain → adapter) | ~$0.60 |
+| 1 | Molex housing for Cable A (confirm orientation) | `43020-0400` plug (if device port is receptacle) OR `43025-0400` receptacle (if device port is plug) | ~$0.60 |
 | 1 | Molex housing 2×3 | `43025-0600` — Cable B (Pi → ACE Pro) | ~$0.60 |
-| 10 | Molex crimp terminals | `43030-0007`, 20–24 AWG | ~$2 |
+| 10 | Molex crimp terminals | `43030-0007` (female, 20–24 AWG) for all uses EXCEPT Cable A with `43020-0400`, which needs `43031-0007` (male tab) for those 3 contacts | ~$2 |
 | 1 | USB-A Male plug or stripped USB-A cable | Cable B (Pi → ACE Pro) | ~$2 |
 | 0.5 m | 3-conductor shielded cable, 22–24 AWG | Cable A (daisy-chain RS485 run — needs separate A, B, GND conductors) | ~$3 |
 | 1 | Molex crimp tool | Engineer PA-09 or PA-21 | ~$20 (one-time) |

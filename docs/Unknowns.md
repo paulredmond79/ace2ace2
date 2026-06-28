@@ -73,23 +73,41 @@ can be fully implemented. Items are removed when resolved.
 
 ## Hardware
 
-### HW-1: ACE 2 Pro RS485 Connector Type — Physical Confirmation
-- **Unknown**: Molex Micro-Fit 3.0 2×2 is from decay71/multiACE README; needs physical verification
-- **How to discover**: Inspect ACE 2 Pro hardware with calipers/reference
-- **Blocks**: Cable ordering for BOM
-- **Status**: High-confidence hypothesis; needs physical confirmation before ordering parts
-- **Documented**: Pinout and Molex part numbers recorded in `docs/Hardware.md`
+### HW-6: ACE 2 Pro Back Panel — Upper Port (6-pin, 2×3) Purpose
+- **Known**: The ACE 2 Pro back panel has two Molex Micro-Fit 3.0 connectors:
+  - **Bottom (4-pin, 2×2)**: RS485 daisy-chain port — confirmed, where the Pi/signal cable connects (HW-1 resolved)
+  - **Top (6-pin, 2×3)**: Purpose unknown
+- **Unknown**: What the upper 6-pin port on the ACE 2 Pro back panel is for. Candidates:
+  USB connection to the internal CH343 chip (for firmware updates or direct USB access),
+  a secondary RS485 port, or something proprietary.
+- **How to discover**: Probe with multimeter; check Anycubic documentation for any reference
+  to the back-panel 6-pin port; compare signals to USB D+/D− levels vs RS485 levels.
+- **Blocks**: Nothing for current bridge design — Pi connects to the 4-pin (bottom) port only.
+- **Status**: Not started
 
-### HW-2: ACE Pro External Connector / Port Type
-- **Unknown**: Whether the ACE Pro exposes the Molex Micro-Fit 3.0 2×3 PCB connector
-  externally, or has a standard USB receptacle (USB-A, Micro-B, etc.) on the chassis.
-  The Molex 6-pin is confirmed as the internal PCB connector from printers-for-people
-  hardware photos; the external chassis interface needs physical inspection.
-- **How to discover**: Physical inspection of ACE Pro unit
-- **Blocks**: Finaling custom cable design — if external port is standard USB then no
-  custom Molex cable is needed
-- **Status**: Internal PCB pinout known (Molex 2×3, see `docs/Hardware.md`); external
-  chassis connector unconfirmed
+### HW-4: ACE Pro Daisy-Chain Connector Protocol
+- **Known**: The Molex Micro-Fit 3.0 2×2 connector on the ACE Pro back panel (below the
+  2×3 USB connector) is the daisy-chain port for linking additional ACE Pro units together.
+- **Unknown**: The protocol carried on this connector. Candidates: proprietary serial,
+  RS485, or a variant of the ACE Pro USB protocol. Pinout unknown.
+- **How to discover**: Probe with multimeter; sniff with logic analyser or oscilloscope
+  while two ACE Pro units are chained; compare pinout to ACE 2 Pro RS485 connector
+- **Blocks**: Multi-ACE Pro support (future milestone); not required for current bridge design
+- **Status**: Purpose confirmed (user inspection). Protocol and pinout unknown.
+
+### HW-7: ACE Pro Pin 6 (VCC) — Connect or Leave NC?
+- **Conflict**: printers-for-people/ACEResearch (High confidence) says Pin 6 VCC is NC;
+  a lower-confidence source asserted it must connect to USB-A VBUS to power the device.
+- **Unknown**: Which is correct? The ACE Pro has its own mains supply, so it may not need
+  VBUS from the host for power or enumeration. Connecting Pi's 5V to a self-powered device
+  risks back-feeding voltage if internal circuitry conflicts.
+- **How to discover**: Measure Pin 6 with a multimeter while ACE Pro is powered from mains
+  (expect ~5V if self-supplied to host, or 0V/floating if truly NC). Alternatively, verify
+  USB enumeration succeeds without Pin 6 connected.
+- **Interim stance**: Leave Pin 6 **unconnected** (fail safe — NC is the safe default for
+  an externally powered device).
+- **Blocks**: Cable B wiring finalisation
+- **Status**: Open — measure on first hardware access
 
 ### HW-3: RS485 Bus Voltage
 - **Unknown**: Signal voltage on RS485 bus (5V or 3.3V differential)
@@ -117,5 +135,7 @@ can be fully implemented. Items are removed when resolved.
 | USB-1b | ACE Pro USB VID | 0x28E9 (GigaDevice GD32F303) | Community, USB database |
 | USB-2b | ACE Pro MCU | GD32F303 | printers-for-people HARDWARE.md |
 | USB-5 | ACE 2 Pro USB chip | WCH CH343, VID 0x1A86 | hakimio IDA analysis |
+| HW-2 | ACE Pro external chassis connector | Molex Micro-Fit 3.0 Male 2×3 (6-pin) — custom cable required | Physical inspection (user photo, 2026-06-28) |
+| HW-1 | ACE 2 Pro daisy-chain port (back) connector type | 4-pin Molex Micro-Fit 3.0 2×2 — bottom port on back panel; cable format 4-pin (ACE 2 Pro) → 6-pin (adapter) | Physical inspection (user, 2026-06-28) |
 
 *Date resolved: 2026-06-28 — initial research phase*

@@ -30,9 +30,13 @@ Molex Micro-Fit 3.0 Male, 2×3 (6-pin):
 - Pin 2: D−
 - Pin 3: D+
 - Pin 5: GND
-- Pin 6: VCC (NOT connected)
+- Pin 6: VCC — **NC per printers-for-people/ACEResearch (high confidence)**; conflicting claim
+  in lower-confidence source says must connect to USB-A VBUS. Leave unconnected until confirmed
+  on hardware. See HW-7 in `docs/Unknowns.md`.
+- Pin 1, Pin 4: NC (do not connect)
 
-Source: decay71/multiACE. Confidence: Medium — needs physical confirmation.
+Source: printers-for-people/ACEResearch (Pin 6 NC); physical inspection (2026-06-28) confirms
+HW-2 connector type. Confidence: High for connector type; HW-7 open for Pin 6 VCC connection.
 
 ### Frame Format
 
@@ -144,15 +148,24 @@ Full field schema is partially documented. See `research/findings.md`.
 | Firmware base | `0x08008000` | High | hakimio |
 | Min firmware | V1.1.31 (2026-03-06) | High | hakimio |
 
-### Physical Connector (ACE 2 Pro PCB)
+### Physical Connectors (ACE 2 Pro)
 
-Molex Micro-Fit 3.0 Female, 2×2 (4-pin):
-- Pin 1: D−
-- Pin 2: D+
-- Pin 3: VCC (NOT connected)
+**Bottom-left port (printer-facing) — 6-pin Molex Micro-Fit 3.0 2×3:**
+This is where the factory "K3/K3M/S1 Signal Cable" connects.
+- 4-pin end → printer base port (latch faces downward)
+- 6-pin end → ACE 2 Pro bottom-left port (latch faces outward)
+
+Source: Anycubic installation instructions + official Compatibility Guide. Confidence: High.
+
+**Back panel — two Molex Micro-Fit 3.0 connectors (stacked, HW-1 resolved):**
+
+Bottom port (4-pin, 2×2) — RS485 daisy-chain, **where the Pi connects**:
+- Pin 1: RS485 B (D−)
+- Pin 2: RS485 A (D+)
+- Pin 3: VCC — leave unconnected until bus voltage confirmed (HW-3)
 - Pin 4: GND
 
-Source: decay71/multiACE. Confidence: Medium — needs physical confirmation.
+Top port (6-pin, 2×3) — purpose unknown (HW-6). Do not connect.
 
 ### Frame Format
 
