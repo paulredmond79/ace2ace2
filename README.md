@@ -98,7 +98,8 @@ black src/ tests/
 |----------|-------------|
 | [docs/Architecture.md](docs/Architecture.md) | Software architecture and layer design |
 | [docs/Protocol.md](docs/Protocol.md) | Protocol specifications (ACE1 + ACE2) |
-| [docs/Hardware.md](docs/Hardware.md) | Hardware requirements, BOM, connector pinouts, custom cables, RS485 wiring |
+| [docs/Hardware.md](docs/Hardware.md) | Hardware requirements, connector pinouts, custom cables, RS485 wiring |
+| [docs/BOM.md](docs/BOM.md) | Full bill of materials with part numbers, sources, and cost estimates |
 | [docs/Safety.md](docs/Safety.md) | Safety rules before connecting hardware |
 | [docs/Unknowns.md](docs/Unknowns.md) | Known unknowns — check before implementing |
 | [docs/Roadmap.md](docs/Roadmap.md) | Development milestones |

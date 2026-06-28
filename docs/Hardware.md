@@ -260,6 +260,8 @@ If not isolated, ensure common GND between Pi and RS485 bus.
 
 ## Bill of Materials
 
+> Full BOM with part numbers and sourcing notes: see [`docs/BOM.md`](BOM.md).
+
 | Qty | Item | Part / Notes | Est. Cost |
 |-----|------|-------------|-----------|
 | 1 | Raspberry Pi 4B (2GB) | Or Pi 5 | ~$35–45 |
