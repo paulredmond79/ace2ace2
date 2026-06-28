@@ -73,7 +73,7 @@ Per Anycubic instructions:
 **Bottom port (4-pin, 2×2) — RS485 daisy-chain, where the Pi connects:**
 This is where Cable A's 4-pin Molex end connects.
 - Mating housing: Molex `43025-0400` receptacle (or `43020-0400` plug — confirm device connector orientation before ordering)
-- Terminals: `43030-0007` (Micro-Fit 3.0 Female Crimp Terminal, 20–24 AWG)
+- Terminals: `43030-0007` female crimp (20–24 AWG) for use with `43025-0400`; or `43031-0007` male tab for use with `43020-0400`
 - Signals: RS485 A (D+), RS485 B (D−), GND, VCC (leave VCC unconnected — HW-3)
 
 **Top port (6-pin, 2×3) — purpose unknown (HW-6):**
