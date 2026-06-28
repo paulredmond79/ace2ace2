@@ -94,7 +94,7 @@ the Molex Micro-Fit 3.0 Male 2×3. No standard USB port is present. Build this c
 | Qty | Item | Molex Part | Source | Est. Unit Cost |
 |-----|------|-----------|--------|---------------|
 | 1 | Molex Micro-Fit 3.0 Receptacle housing, 2×3 (6-circuit) | **43025-0600** | Digi-Key / Molex | ~$0.60 |
-| 4 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$1.00) |
+| 3 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
 | 1 | USB-A Male plug with bare wire leads, or cut USB-A cable | Generic | Amazon / local | ~$1–2 |
 | ~0.5 m | 24 AWG hook-up wire, 4 colours | UL1007 or equivalent | Amazon / local | ~$1 |
 
@@ -105,12 +105,13 @@ Wire as follows:
 | Pin 2 | USB D− | Pin 2 (D−) |
 | Pin 3 | USB D+ | Pin 3 (D+) |
 | Pin 5 | GND | Pin 4 (GND) |
-| Pin 6 | VCC / VBUS | Pin 1 (VBUS) — **must connect** to power the ACE Pro |
+| Pin 6 | VCC | NC — do not connect (see HW-7 in `docs/Unknowns.md`) |
 | Pin 1 | NC | — |
 | Pin 4 | NC | — |
 
-Pin 6 (VCC) is the VBUS input to the ACE Pro. Without it connected to USB-A Pin 1, the
-device receives no power and will not enumerate on the Pi's USB bus.
+> ⚠️ **HW-7 open**: Pin 6 VCC connection is disputed between community sources. Leave it
+> unconnected (the high-confidence source says NC). Do not connect Pin 6 until confirmed
+> on hardware — connecting Pi's 5V to a self-powered device risks hardware damage.
 
 ---
 
@@ -167,7 +168,7 @@ device receives no power and will not enumerate on the Pi's USB bus.
 |------|--------|
 | 2026-06-28 | Revised topology: daisy-chain through ACE 2 Pro back port — no T-junction |
 | 2026-06-28 | Removed Wago connectors; added USB-RS485 adapter as Cable A component |
-| 2026-06-28 | Fixed Cable B: Pin 6 (VCC/VBUS) must connect to USB-A VBUS to power ACE Pro |
+| 2026-06-28 | Reverted Cable B Pin 6 VCC claim: high-confidence source says NC; marked HW-7 open |
 | 2026-06-28 | Fixed Cable A: specify 3-conductor shielded cable; Belden 9501 is 2-conductor only |
 | 2026-06-28 | Fixed crimp terminal AWG: 43030-0007 is 20–24 AWG; changed wire spec to 24 AWG |
 | 2026-06-28 | Added Molex housing mating caveat: 43025 vs 43020 depends on device connector type |

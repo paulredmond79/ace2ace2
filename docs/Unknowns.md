@@ -95,6 +95,20 @@ can be fully implemented. Items are removed when resolved.
 - **Blocks**: Multi-ACE Pro support (future milestone); not required for current bridge design
 - **Status**: Purpose confirmed (user inspection). Protocol and pinout unknown.
 
+### HW-7: ACE Pro Pin 6 (VCC) — Connect or Leave NC?
+- **Conflict**: printers-for-people/ACEResearch (High confidence) says Pin 6 VCC is NC;
+  a lower-confidence source asserted it must connect to USB-A VBUS to power the device.
+- **Unknown**: Which is correct? The ACE Pro has its own mains supply, so it may not need
+  VBUS from the host for power or enumeration. Connecting Pi's 5V to a self-powered device
+  risks back-feeding voltage if internal circuitry conflicts.
+- **How to discover**: Measure Pin 6 with a multimeter while ACE Pro is powered from mains
+  (expect ~5V if self-supplied to host, or 0V/floating if truly NC). Alternatively, verify
+  USB enumeration succeeds without Pin 6 connected.
+- **Interim stance**: Leave Pin 6 **unconnected** (fail safe — NC is the safe default for
+  an externally powered device).
+- **Blocks**: Cable B wiring finalisation
+- **Status**: Open — measure on first hardware access
+
 ### HW-3: RS485 Bus Voltage
 - **Unknown**: Signal voltage on RS485 bus (5V or 3.3V differential)
 - **How to discover**: Measure with multimeter before any connection

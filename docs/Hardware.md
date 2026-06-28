@@ -99,7 +99,7 @@ Pin 2 — USB D−
 Pin 3 — USB D+
 Pin 4 — NC       (do not connect)
 Pin 5 — GND
-Pin 6 — VCC/VBUS (connect to USB-A Pin 1 — provides bus power from Pi to ACE Pro)
+Pin 6 — VCC (NC — do not connect; see HW-7 in docs/Unknowns.md)
 ```
 
 **Molex part number for mating connector (receptacle):**
@@ -173,18 +173,19 @@ Molex Micro-Fit 3.0 Female 2×3  →  USB-A Male (to Pi USB port)
 Pin 2 (USB D−)       ──────────  USB-A Pin 2 (D−)
 Pin 3 (USB D+)       ──────────  USB-A Pin 3 (D+)
 Pin 5 (GND)          ──────────  USB-A Pin 4 (GND)
-Pin 6 (VCC / VBUS)   ──────────  USB-A Pin 1 (VBUS) — bus power from Pi to ACE Pro
+Pin 6 (VCC)          — not connected (NC — see HW-7)
 Pin 1, Pin 4         — not connected
 ```
 
-Pin 6 (VCC) is the VBUS input that powers the ACE Pro from the Pi's USB port. It must
-be connected. Without it the device receives no power and will not enumerate.
+> ⚠️ **HW-7 open**: Pin 6 VCC connection is disputed between sources. The high-confidence
+> community source (printers-for-people/ACEResearch) says Pin 6 is NC. Leave it unconnected
+> until confirmed on hardware. See `docs/Unknowns.md` HW-7.
 
 Use 24 AWG wire for all conductors. Keep cable length under 2 m for USB 2.0 signal integrity.
 
 **Parts needed:**
 - 1× Molex `43025-0600` housing (2×3 Female receptacle)
-- 4× Molex `43030-0007` crimp terminals, 20–24 AWG (4 wires: D−, D+, GND, VBUS)
+- 3× Molex `43030-0007` crimp terminals, 20–24 AWG (3 wires: D−, D+, GND)
 - 1× USB-A Male plug with bare wire leads (or cut a USB-A cable and strip the end)
 
 ---

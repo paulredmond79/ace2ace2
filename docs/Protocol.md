@@ -30,10 +30,13 @@ Molex Micro-Fit 3.0 Male, 2×3 (6-pin):
 - Pin 2: D−
 - Pin 3: D+
 - Pin 5: GND
-- Pin 6: VCC/VBUS — **must connect to USB-A Pin 1** (this is the power input; device will not enumerate without it)
+- Pin 6: VCC — **NC per printers-for-people/ACEResearch (high confidence)**; conflicting claim
+  in lower-confidence source says must connect to USB-A VBUS. Leave unconnected until confirmed
+  on hardware. See HW-7 in `docs/Unknowns.md`.
 - Pin 1, Pin 4: NC (do not connect)
 
-Source: decay71/multiACE + physical inspection (2026-06-28). Confidence: High (HW-2 resolved).
+Source: printers-for-people/ACEResearch (Pin 6 NC); physical inspection (2026-06-28) confirms
+HW-2 connector type. Confidence: High for connector type; HW-7 open for Pin 6 VCC connection.
 
 ### Frame Format
 
