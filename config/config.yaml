@@ -1,0 +1,60 @@
+# ACE Bridge Configuration
+#
+# Values confirmed from community research (see docs/Protocol.md and research/findings.md).
+# Items marked ⚠️ still need physical hardware confirmation.
+
+printer:
+  # RS485 serial port (ACE 2 Pro connected via CH343 USB-to-UART at 230400 baud)
+  rs485_port: /dev/ttyUSB0
+  # Source: hakimio firmware analysis, Kobra-S1/ACEPRO. Confidence: High.
+  baud_rate: 230400
+  parity: "N"
+  stop_bits: 1
+  # GPIO pin for DE/RE direction control; null = USB adapter handles it automatically
+  de_re_pin: null
+  # ⚠️ Unknown: RS485 address for the bridge unit — depends on MAP-2 resolution
+  address: 0x02
+
+ace_pro:
+  # ACE Pro VID confirmed from community: GigaDevice GD32F303
+  # Source: decay71/multiACE, USB device database. Confidence: High.
+  usb_vid: 0x28E9
+  # ACE Pro PID — from decay71/multiACE only. Confirm with: bridge inspect-usb
+  # Confidence: Medium — single source, needs hardware verification
+  usb_pid: 0x018A
+  # CDC ACM endpoint (standard for CDC devices)
+  usb_endpoint_in: 0x81
+  usb_endpoint_out: 0x01
+  usb_interface: 0
+  read_timeout_ms: 100
+  write_timeout_ms: 1000
+  # ACE Pro baud rate (as CDC ACM serial device)
+  # Source: Multiple community drivers. Confidence: High.
+  baud_rate: 115200
+
+mapping:
+  # Printer slot N maps to ACE Pro slot N-offset
+  # Assumption: printer slots 5–8 map to ACE Pro slots 1–4
+  # ⚠️ Confirm from capture — see docs/Unknowns.md MAP-1
+  slot_offset: 4
+
+bridge:
+  # Safety: start in read-only mode. Set false only after confirming protocol.
+  read_only: true
+
+  # Simulation mode: no hardware access
+  simulate: false
+
+  # Capture all traffic to disk for analysis
+  capture_enabled: true
+  capture_path: captures/
+
+  # Logging
+  log_level: INFO
+  log_file: null  # e.g. logs/bridge.log
+
+  # ⚠️ Unknown: Correct interval — see capture to determine printer polling rate
+  heartbeat_interval_s: 1.0
+
+  # ACE Pro command timeout
+  command_timeout_s: 5.0
