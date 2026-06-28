@@ -86,8 +86,9 @@ only requires adding a new driver, not touching the emulator.
 ## Development Commands
 
 ```bash
-# Install in dev mode
+# Install in dev mode + activate pre-commit hooks (do this once after cloning)
 pip install -e ".[dev]"
+pre-commit install
 
 # Run tests
 pytest
@@ -95,7 +96,11 @@ pytest
 # Type check
 mypy src/
 
-# Lint
+# Auto-fix lint (ALWAYS run this before committing, not --check)
+ruff check --fix --unsafe-fixes src/ tests/
+black src/ tests/
+
+# Verify clean (these are what CI runs)
 ruff check src/ tests/
 black --check src/ tests/
 
