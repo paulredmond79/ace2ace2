@@ -59,14 +59,18 @@ plugs into the ACE 2 Pro daisy-chain port; the 6-pin end terminates at the USB-R
 screw terminals (A, B, GND). The official Anycubic cascade kit provides a matching
 "signal adapter cable" — use it if available.
 
-> ⚠️ **Connector orientation**: Confirm whether the device has a plug (pin header) or
-> receptacle (socket) before ordering the housing. If the device has a receptacle, use
-> `43025-0400` (cable receptacle). If the device has a plug header, use `43020-0400`.
+> ⚠️ **Connector orientation**: The cable housing must be the **opposite** gender of the device
+> port — connectors mate by pairing plug to receptacle. Confirm whether the device has a plug
+> (pin header) or receptacle (socket) before ordering:
+> - Device port = **receptacle** (socket) → cable needs a **plug** housing: `43020-0400` with
+>   male tab contacts `43031-0007`
+> - Device port = **plug** (pin header) → cable needs a **receptacle** housing: `43025-0400`
+>   with female crimp contacts `43030-0007`
 
 | Qty | Item | Molex Part | Source | Est. Unit Cost |
 |-----|------|-----------|--------|---------------|
-| 1 | Molex Micro-Fit 3.0 4-pin housing (confirm orientation — see note above) | **43025-0400** receptacle or **43020-0400** plug | Digi-Key / Molex | ~$0.60 |
-| 3 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
+| 1 | Molex Micro-Fit 3.0 4-pin housing (confirm orientation — see note above) | **43020-0400** plug (if device is receptacle) or **43025-0400** receptacle (if device is plug) | Digi-Key / Molex | ~$0.60 |
+| 3 | Molex Micro-Fit 3.0 crimp contacts — female `43030-0007` (with 43025) or male tab `43031-0007` (with 43020) | **43030-0007** or **43031-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
 | ~0.5 m | 3-conductor shielded cable, 22–24 AWG | Alpha Wire 5563 or Belden 9533 (not 9501 — 2-conductor only) | Digi-Key / local | ~$2–3 |
 
 Wire the pigtail as follows (connect free ends to USB-RS485 adapter terminals):
