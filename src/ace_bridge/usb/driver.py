@@ -123,7 +123,7 @@ class USBDriver:
         This works without knowing the ACE Pro VID/PID in advance.
         """
         try:
-            import usb.core  # type: ignore[import]
+            import usb.core  # type: ignore[import-untyped]
 
             devices = usb.core.find(find_all=True)
             return [{"vid": d.idVendor, "pid": d.idProduct} for d in devices]

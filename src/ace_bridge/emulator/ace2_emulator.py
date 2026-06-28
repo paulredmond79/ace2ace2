@@ -67,9 +67,9 @@ class ACE2Emulator:
         set are known from capture. See docs/Unknowns.md RS-5.
         """
         logger.debug(
-            "Emulator received packet: type=%s address=0x%02X payload=%s",
-            packet.packet_type,
-            packet.address,
+            "Emulator received packet: cmd=%s flags=0x%02X payload=%s",
+            packet.command,
+            packet.flags,
             packet.payload.hex(" ").upper(),
         )
 

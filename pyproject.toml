@@ -63,3 +63,18 @@ ignore = [
 [tool.black]
 line-length = 100
 target-version = ["py312"]
+
+[tool.coverage.run]
+source = ["ace_bridge"]
+omit = [
+    # Hardware interface layers — cannot be unit-tested without physical devices
+    "*/rs485/driver.py",
+    "*/usb/driver.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]

@@ -4,7 +4,7 @@ from typer.testing import CliRunner
 
 from ace_bridge.cli import app
 
-runner = CliRunner()
+runner = CliRunner(env={"NO_COLOR": "1"})
 
 
 def test_cli_help() -> None:

@@ -23,7 +23,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Literal
+from typing import IO, Literal
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +75,7 @@ class CaptureWriter:
     def __init__(self, path: Path, buffer_size: int = 1000) -> None:
         self._path = path
         self._queue: asyncio.Queue[CapturedPacket | None] = asyncio.Queue(maxsize=buffer_size)
-        self._file: object | None = None
+        self._file: IO[str] | None = None
         self._task: asyncio.Task[None] | None = None
         self._written = 0
 
@@ -99,7 +99,7 @@ class CaptureWriter:
         if self._task:
             await self._task
         if self._file:
-            self._file.close()  # type: ignore[union-attr]
+            self._file.close()
         logger.info("Capture writer stopped. %d packets written to %s", self._written, self._path)
 
     async def write(self, packet: CapturedPacket) -> None:
@@ -116,6 +116,6 @@ class CaptureWriter:
             if packet is None:  # sentinel
                 break
             assert self._file is not None
-            self._file.write(packet.to_json() + "\n")  # type: ignore[union-attr]
+            self._file.write(packet.to_json() + "\n")
             self._written += 1
             self._queue.task_done()

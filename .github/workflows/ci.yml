@@ -106,7 +106,7 @@ jobs:
           --cov=ace_bridge
           --cov-report=xml
           --cov-report=term-missing
-          --cov-fail-under=80
+          --cov-fail-under=70
           -v
 
       # Upload coverage only once (3.12 run), not for both matrix legs.

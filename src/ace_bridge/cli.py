@@ -148,8 +148,8 @@ def inspect_usb(
 def _inspect_usb() -> None:
     """Internal implementation of USB device inspection."""
     try:
-        import usb.core  # type: ignore[import]
-        import usb.util  # type: ignore[import]
+        import usb.core  # type: ignore[import-untyped]
+        import usb.util  # type: ignore[import-untyped]
     except ImportError as exc:
         console.print("[red]pyusb not installed. Run: pip install pyusb[/]")
         raise typer.Exit(code=1) from exc

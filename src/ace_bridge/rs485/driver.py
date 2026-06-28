@@ -160,7 +160,7 @@ class RS485Driver:
         if self._config.de_re_pin is not None:
             # Import RPi.GPIO lazily — not available on non-Pi systems
             try:
-                import RPi.GPIO as GPIO  # type: ignore[import]
+                import RPi.GPIO as GPIO  # type: ignore[import-untyped]
 
                 GPIO.output(self._config.de_re_pin, GPIO.HIGH)
             except ImportError:
@@ -170,7 +170,7 @@ class RS485Driver:
         """Assert DE LOW to switch RS485 to receive mode."""
         if self._config.de_re_pin is not None:
             try:
-                import RPi.GPIO as GPIO  # type: ignore[import]
+                import RPi.GPIO as GPIO
 
                 GPIO.output(self._config.de_re_pin, GPIO.LOW)
             except ImportError:
