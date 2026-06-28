@@ -73,22 +73,18 @@ can be fully implemented. Items are removed when resolved.
 
 ## Hardware
 
-### HW-1: ACE 2 Pro Daisy-Chain Port (Back) — Connector Type
-- **Known**: The ACE 2 Pro printer-facing port (bottom-left) is **6-pin Molex Micro-Fit 3.0
-  2×3** — confirmed from Anycubic installation instructions (factory cable has 6-pin end here,
-  4-pin end at printer). Do not modify or replicate this connection.
-- **Unknown**: The daisy-chain port on the **back** of the ACE 2 Pro (where the Pi connects)
-  has not been physically inspected. Pin count is likely 4-pin or 6-pin Molex Micro-Fit 3.0.
-  Plug vs receptacle orientation is also unconfirmed.
-- **Indirect evidence**: Anycubic's official ACE 2 Pro Compatibility Guide (2026-06-28)
-  documents cascading two ACE 2 Pro units using "a signal adapter cable and a USB-to-RS485
-  cable." The cascade signal cable uses the same 4-pin→6-pin format as the printer-to-ACE
-  signal cable. If the second ACE 2 Pro's input side is 6-pin (matching the first unit's
-  printer-facing port), the daisy-chain port on the back may also be 6-pin. This is plausible
-  but not confirmed — the guide shows device-to-device connection, not device port close-ups.
-- **How to discover**: Physical inspection of the back of the ACE 2 Pro unit
-- **Blocks**: Cable A Molex housing selection and BOM completion
-- **Status**: ⚠️ Must resolve before building Cable A or ordering Molex housing
+### HW-5: ACE 2 Pro Back Panel — Lower Port (4-pin, 2×2) Purpose
+- **Known**: The ACE 2 Pro back panel has two Molex Micro-Fit 3.0 connectors:
+  - **Top (6-pin, 2×3)**: RS485 daisy-chain port — this is where the Pi connects (HW-1 resolved)
+  - **Bottom (4-pin, 2×2)**: Purpose unknown
+- **Unknown**: What the lower 4-pin port on the ACE 2 Pro back panel is for.
+  By analogy with the ACE Pro's back panel (also 6-pin top / 4-pin bottom), the 4-pin
+  may be a second daisy-chain port for cascading additional ACE 2 Pro units, or it may
+  serve a different purpose (power, debug, etc.).
+- **How to discover**: Probe with multimeter; check Anycubic cascade guide for second-unit
+  connection instructions; compare signals to known RS485 A/B/GND pattern.
+- **Blocks**: Nothing for current bridge design — Pi connects to the 6-pin (top) port only.
+- **Status**: Not started
 
 ### HW-4: ACE Pro Daisy-Chain Connector Protocol
 - **Known**: The Molex Micro-Fit 3.0 2×2 connector on the ACE Pro back panel (below the
@@ -127,5 +123,6 @@ can be fully implemented. Items are removed when resolved.
 | USB-2b | ACE Pro MCU | GD32F303 | printers-for-people HARDWARE.md |
 | USB-5 | ACE 2 Pro USB chip | WCH CH343, VID 0x1A86 | hakimio IDA analysis |
 | HW-2 | ACE Pro external chassis connector | Molex Micro-Fit 3.0 Male 2×3 (6-pin) — custom cable required | Physical inspection (user photo, 2026-06-28) |
+| HW-1 | ACE 2 Pro daisy-chain port (back) connector type | 6-pin Molex Micro-Fit 3.0 2×3 — top port on back panel | Physical inspection (user, 2026-06-28) |
 
 *Date resolved: 2026-06-28 — initial research phase*

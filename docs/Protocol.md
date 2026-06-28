@@ -154,15 +154,15 @@ This is where the factory "K3/K3M/S1 Signal Cable" connects.
 
 Source: Anycubic installation instructions + official Compatibility Guide. Confidence: High.
 
-**Back port (daisy-chain, HW-1 unresolved) — likely 4-pin or 6-pin Molex Micro-Fit 3.0:**
-This is where the Raspberry Pi connects via USB-RS485 adapter.
-Signals: RS485 A (D+), RS485 B (D−), GND. VCC if present — do not connect until voltage confirmed.
-Pin count and connector orientation require physical inspection. See `docs/Unknowns.md` HW-1.
+**Back panel — two Molex Micro-Fit 3.0 connectors (stacked, HW-1 resolved):**
 
-Anycubic cascade documentation confirms this port carries RS485 signals and that
-connecting a second ACE 2 Pro requires a USB-to-RS485 adapter — consistent with the
-bridge design. The signal cable in a two-ACE-2-Pro cascade uses the same 4-pin→6-pin
-cable, suggesting the daisy-chain port may also be 6-pin, but this is not yet confirmed.
+Top port (6-pin, 2×3) — RS485 daisy-chain, **where the Pi connects**:
+- RS485 A (D+)
+- RS485 B (D−)
+- GND
+- VCC (if present) — leave unconnected until bus voltage confirmed (HW-3)
+
+Bottom port (4-pin, 2×2) — purpose unknown (HW-5). Do not connect.
 
 ### Frame Format
 

@@ -49,17 +49,18 @@ connect the Molex pigtail wires directly to the A, B, and GND terminals.
 
 ### Molex Pigtail (ACE 2 Pro Daisy-Chain End)
 
-> ⚠️ **HW-1 BLOCKS THIS**: The daisy-chain port on the back of the ACE 2 Pro has not
-> been physically inspected. Do not order the Molex housing until you have confirmed:
-> 1. Pin count (4-pin or 6-pin)
-> 2. Connector orientation (plug header or receptacle housing on device)
->
-> Note: the ACE 2 Pro's **printer-facing** port (bottom-left) is 6-pin — do not confuse
-> it with the daisy-chain port on the back.
+**Confirmed (physical inspection, 2026-06-28):** The daisy-chain port on the back of the
+ACE 2 Pro is the **top connector** on the back panel — Molex Micro-Fit 3.0 **6-pin (2×3)**.
+The back panel also has a lower 4-pin (2×2) connector whose purpose is unknown (HW-5) —
+do not connect to it.
+
+> ⚠️ **Connector orientation**: Confirm whether the device has a plug (pin header) or
+> receptacle (socket) before ordering the housing. If the device has a receptacle, use
+> `43025-0600` (cable receptacle). If the device has a plug header, use `43020-0600`.
 
 | Qty | Item | Molex Part | Source | Est. Unit Cost |
 |-----|------|-----------|--------|---------------|
-| 1 | Molex Micro-Fit 3.0 housing — **do not order until HW-1 confirmed** | TBC (4-pin or 6-pin; 43025 or 43020 series) | Digi-Key / Molex | ~$0.60 |
+| 1 | Molex Micro-Fit 3.0 6-pin housing (confirm orientation — see note above) | **43025-0600** receptacle or **43020-0600** plug | Digi-Key / Molex | ~$0.60 |
 | 3 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
 | ~0.5 m | 3-conductor shielded cable, 22–24 AWG | Alpha Wire 5563 or Belden 9533 (not 9501 — 2-conductor only) | Digi-Key / local | ~$2–3 |
 
@@ -161,6 +162,6 @@ device receives no power and will not enumerate on the Pi's USB bus.
 | 2026-06-28 | Fixed Cable A: specify 3-conductor shielded cable; Belden 9501 is 2-conductor only |
 | 2026-06-28 | Fixed crimp terminal AWG: 43030-0007 is 20–24 AWG; changed wire spec to 24 AWG |
 | 2026-06-28 | Added Molex housing mating caveat: 43025 vs 43020 depends on device connector type |
-| — | HW-1: ACE 2 Pro connector type needs physical confirmation before ordering Molex housing |
+| 2026-06-28 | HW-1 resolved: ACE 2 Pro daisy-chain port is top 6-pin (2×3) connector on back panel |
 | — | HW-2: ACE Pro external chassis connector unconfirmed — Cable B may not be needed |
 | — | HW-3: RS485 bus voltage unconfirmed — transceiver spec may change |

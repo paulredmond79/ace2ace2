@@ -183,6 +183,28 @@ Fields: material name, color, diameter, weight, remaining, temperature settings
 
 ---
 
+## ACE 2 Pro Hardware — Back Panel Connectors
+
+Source: Physical inspection (2026-06-28)
+Confidence: High (direct observation)
+
+Back panel has two stacked Molex Micro-Fit 3.0 connectors on the left side:
+
+- **Top: Molex Micro-Fit 3.0 6-pin (2×3)** — RS485 daisy-chain port.
+  This is the port the Raspberry Pi connects to via USB-RS485 adapter. Resolves HW-1.
+- **Bottom: Molex Micro-Fit 3.0 4-pin (2×2)** — purpose unknown (HW-5).
+  By analogy with the ACE Pro back panel (same physical layout), this may be a secondary
+  daisy-chain port for cascading additional ACE 2 Pro units. Do not connect for current design.
+
+Layout note: The ACE 2 Pro and ACE Pro back panels share the same physical form factor
+(6-pin on top, 4-pin on bottom), but the protocols carried on the top connector differ:
+ACE Pro top = USB; ACE 2 Pro top = RS485.
+
+Mating connector for Cable A: Molex `43025-0600` (6-pin receptacle) or `43020-0600` (plug),
+depending on device connector orientation. Confirm before ordering.
+
+---
+
 ## ACE Pro Hardware — Back Panel Connectors
 
 Source: Physical inspection (2026-06-28)
