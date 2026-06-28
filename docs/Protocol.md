@@ -156,13 +156,13 @@ Source: Anycubic installation instructions + official Compatibility Guide. Confi
 
 **Back panel — two Molex Micro-Fit 3.0 connectors (stacked, HW-1 resolved):**
 
-Top port (6-pin, 2×3) — RS485 daisy-chain, **where the Pi connects**:
-- RS485 A (D+)
-- RS485 B (D−)
-- GND
-- VCC (if present) — leave unconnected until bus voltage confirmed (HW-3)
+Bottom port (4-pin, 2×2) — RS485 daisy-chain, **where the Pi connects**:
+- Pin 1: RS485 B (D−)
+- Pin 2: RS485 A (D+)
+- Pin 3: VCC — leave unconnected until bus voltage confirmed (HW-3)
+- Pin 4: GND
 
-Bottom port (4-pin, 2×2) — purpose unknown (HW-5). Do not connect.
+Top port (6-pin, 2×3) — purpose unknown (HW-6). Do not connect.
 
 ### Frame Format
 

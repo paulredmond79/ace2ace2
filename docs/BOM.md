@@ -50,17 +50,22 @@ connect the Molex pigtail wires directly to the A, B, and GND terminals.
 ### Molex Pigtail (ACE 2 Pro Daisy-Chain End)
 
 **Confirmed (physical inspection, 2026-06-28):** The daisy-chain port on the back of the
-ACE 2 Pro is the **top connector** on the back panel — Molex Micro-Fit 3.0 **6-pin (2×3)**.
-The back panel also has a lower 4-pin (2×2) connector whose purpose is unknown (HW-5) —
+ACE 2 Pro is the **bottom connector** on the back panel — Molex Micro-Fit 3.0 **4-pin (2×2)**.
+The back panel also has an upper 6-pin (2×3) connector whose purpose is unknown (HW-6) —
 do not connect to it.
+
+The cable uses the same **4-pin → 6-pin** format as the factory signal cable. The 4-pin end
+plugs into the ACE 2 Pro daisy-chain port; the 6-pin end terminates at the USB-RS485 adapter
+screw terminals (A, B, GND). The official Anycubic cascade kit provides a matching
+"signal adapter cable" — use it if available.
 
 > ⚠️ **Connector orientation**: Confirm whether the device has a plug (pin header) or
 > receptacle (socket) before ordering the housing. If the device has a receptacle, use
-> `43025-0600` (cable receptacle). If the device has a plug header, use `43020-0600`.
+> `43025-0400` (cable receptacle). If the device has a plug header, use `43020-0400`.
 
 | Qty | Item | Molex Part | Source | Est. Unit Cost |
 |-----|------|-----------|--------|---------------|
-| 1 | Molex Micro-Fit 3.0 6-pin housing (confirm orientation — see note above) | **43025-0600** receptacle or **43020-0600** plug | Digi-Key / Molex | ~$0.60 |
+| 1 | Molex Micro-Fit 3.0 4-pin housing (confirm orientation — see note above) | **43025-0400** receptacle or **43020-0400** plug | Digi-Key / Molex | ~$0.60 |
 | 3 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
 | ~0.5 m | 3-conductor shielded cable, 22–24 AWG | Alpha Wire 5563 or Belden 9533 (not 9501 — 2-conductor only) | Digi-Key / local | ~$2–3 |
 
@@ -162,6 +167,6 @@ device receives no power and will not enumerate on the Pi's USB bus.
 | 2026-06-28 | Fixed Cable A: specify 3-conductor shielded cable; Belden 9501 is 2-conductor only |
 | 2026-06-28 | Fixed crimp terminal AWG: 43030-0007 is 20–24 AWG; changed wire spec to 24 AWG |
 | 2026-06-28 | Added Molex housing mating caveat: 43025 vs 43020 depends on device connector type |
-| 2026-06-28 | HW-1 resolved: ACE 2 Pro daisy-chain port is top 6-pin (2×3) connector on back panel |
+| 2026-06-28 | HW-1 resolved: ACE 2 Pro daisy-chain port is bottom 4-pin (2×2) connector on back panel; cable format is 4-pin → 6-pin (same as factory signal cable) |
 | — | HW-2: ACE Pro external chassis connector unconfirmed — Cable B may not be needed |
 | — | HW-3: RS485 bus voltage unconfirmed — transceiver spec may change |

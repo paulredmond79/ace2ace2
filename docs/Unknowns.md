@@ -73,17 +73,16 @@ can be fully implemented. Items are removed when resolved.
 
 ## Hardware
 
-### HW-5: ACE 2 Pro Back Panel — Lower Port (4-pin, 2×2) Purpose
+### HW-6: ACE 2 Pro Back Panel — Upper Port (6-pin, 2×3) Purpose
 - **Known**: The ACE 2 Pro back panel has two Molex Micro-Fit 3.0 connectors:
-  - **Top (6-pin, 2×3)**: RS485 daisy-chain port — this is where the Pi connects (HW-1 resolved)
-  - **Bottom (4-pin, 2×2)**: Purpose unknown
-- **Unknown**: What the lower 4-pin port on the ACE 2 Pro back panel is for.
-  By analogy with the ACE Pro's back panel (also 6-pin top / 4-pin bottom), the 4-pin
-  may be a second daisy-chain port for cascading additional ACE 2 Pro units, or it may
-  serve a different purpose (power, debug, etc.).
-- **How to discover**: Probe with multimeter; check Anycubic cascade guide for second-unit
-  connection instructions; compare signals to known RS485 A/B/GND pattern.
-- **Blocks**: Nothing for current bridge design — Pi connects to the 6-pin (top) port only.
+  - **Bottom (4-pin, 2×2)**: RS485 daisy-chain port — confirmed, where the Pi/signal cable connects (HW-1 resolved)
+  - **Top (6-pin, 2×3)**: Purpose unknown
+- **Unknown**: What the upper 6-pin port on the ACE 2 Pro back panel is for. Candidates:
+  USB connection to the internal CH343 chip (for firmware updates or direct USB access),
+  a secondary RS485 port, or something proprietary.
+- **How to discover**: Probe with multimeter; check Anycubic documentation for any reference
+  to the back-panel 6-pin port; compare signals to USB D+/D− levels vs RS485 levels.
+- **Blocks**: Nothing for current bridge design — Pi connects to the 4-pin (bottom) port only.
 - **Status**: Not started
 
 ### HW-4: ACE Pro Daisy-Chain Connector Protocol
@@ -123,6 +122,6 @@ can be fully implemented. Items are removed when resolved.
 | USB-2b | ACE Pro MCU | GD32F303 | printers-for-people HARDWARE.md |
 | USB-5 | ACE 2 Pro USB chip | WCH CH343, VID 0x1A86 | hakimio IDA analysis |
 | HW-2 | ACE Pro external chassis connector | Molex Micro-Fit 3.0 Male 2×3 (6-pin) — custom cable required | Physical inspection (user photo, 2026-06-28) |
-| HW-1 | ACE 2 Pro daisy-chain port (back) connector type | 6-pin Molex Micro-Fit 3.0 2×3 — top port on back panel | Physical inspection (user, 2026-06-28) |
+| HW-1 | ACE 2 Pro daisy-chain port (back) connector type | 4-pin Molex Micro-Fit 3.0 2×2 — bottom port on back panel; cable format 4-pin (ACE 2 Pro) → 6-pin (adapter) | Physical inspection (user, 2026-06-28) |
 
 *Date resolved: 2026-06-28 — initial research phase*

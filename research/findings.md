@@ -190,18 +190,17 @@ Confidence: High (direct observation)
 
 Back panel has two stacked Molex Micro-Fit 3.0 connectors on the left side:
 
-- **Top: Molex Micro-Fit 3.0 6-pin (2×3)** — RS485 daisy-chain port.
+- **Bottom: Molex Micro-Fit 3.0 4-pin (2×2)** — RS485 daisy-chain port.
   This is the port the Raspberry Pi connects to via USB-RS485 adapter. Resolves HW-1.
-- **Bottom: Molex Micro-Fit 3.0 4-pin (2×2)** — purpose unknown (HW-5).
-  By analogy with the ACE Pro back panel (same physical layout), this may be a secondary
-  daisy-chain port for cascading additional ACE 2 Pro units. Do not connect for current design.
+  Cable format: 4-pin (ACE 2 Pro) → 6-pin (adapter end) — same format as factory signal cable.
+  Mating connector: Molex `43025-0400` (4-pin receptacle) or `43020-0400` (plug),
+  depending on device connector orientation. Confirm before ordering.
+- **Top: Molex Micro-Fit 3.0 6-pin (2×3)** — purpose unknown (HW-6).
+  Do not connect for current design.
 
 Layout note: The ACE 2 Pro and ACE Pro back panels share the same physical form factor
-(6-pin on top, 4-pin on bottom), but the protocols carried on the top connector differ:
-ACE Pro top = USB; ACE 2 Pro top = RS485.
-
-Mating connector for Cable A: Molex `43025-0600` (6-pin receptacle) or `43020-0600` (plug),
-depending on device connector orientation. Confirm before ordering.
+(6-pin on top, 4-pin on bottom), but the functional roles are reversed:
+ACE Pro top (6-pin) = USB to Pi; ACE 2 Pro bottom (4-pin) = RS485 daisy-chain to Pi.
 
 ---
 
