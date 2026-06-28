@@ -150,8 +150,10 @@ for EMI rejection, with GND carried on its own insulated conductor.
 Molex Micro-Fit 3.0 Male 2×3 connector externally. There is no standard USB port on
 the chassis — this custom cable is required.
 
-> Note: A second Molex 2×2 connector is also present on the back panel (lower, below
-> the 2×3). Its purpose is unknown (HW-4 in `docs/Unknowns.md`). Do not connect to it.
+> Note: A second Molex 2×2 connector is present on the back panel (lower, below the 2×3).
+> This is the ACE Pro daisy-chain port for linking additional ACE Pro units together.
+> Its protocol and pinout are unknown (HW-4 in `docs/Unknowns.md`). Do not connect to it
+> for the current bridge design — the Pi connects via the 2×3 port above it.
 
 Build this cable to connect the Pi to the ACE Pro:
 

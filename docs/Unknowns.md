@@ -80,14 +80,15 @@ can be fully implemented. Items are removed when resolved.
 - **Status**: High-confidence hypothesis; needs physical confirmation before ordering parts
 - **Documented**: Pinout and Molex part numbers recorded in `docs/Hardware.md`
 
-### HW-4: ACE Pro Second Connector (2×2, lower left on back panel)
-- **Unknown**: Purpose of the second Molex Micro-Fit 3.0 2×2 connector visible on the
-  ACE Pro back panel, below the 2×3 USB connector. Could be RS485, SWD/debug, or another
-  serial interface.
-- **How to discover**: Probe with multimeter; compare to ACE 2 Pro RS485 connector pinout;
-  check community hardware teardowns
-- **Blocks**: Nothing critical — USB path is confirmed; this is additional information
-- **Status**: Newly observed; not yet investigated
+### HW-4: ACE Pro Daisy-Chain Connector Protocol
+- **Known**: The Molex Micro-Fit 3.0 2×2 connector on the ACE Pro back panel (below the
+  2×3 USB connector) is the daisy-chain port for linking additional ACE Pro units together.
+- **Unknown**: The protocol carried on this connector. Candidates: proprietary serial,
+  RS485, or a variant of the ACE Pro USB protocol. Pinout unknown.
+- **How to discover**: Probe with multimeter; sniff with logic analyser or oscilloscope
+  while two ACE Pro units are chained; compare pinout to ACE 2 Pro RS485 connector
+- **Blocks**: Multi-ACE Pro support (future milestone); not required for current bridge design
+- **Status**: Purpose confirmed (user inspection). Protocol and pinout unknown.
 
 ### HW-3: RS485 Bus Voltage
 - **Unknown**: Signal voltage on RS485 bus (5V or 3.3V differential)

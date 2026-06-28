@@ -183,6 +183,29 @@ Fields: material name, color, diameter, weight, remaining, temperature settings
 
 ---
 
+## ACE Pro Hardware — Back Panel Connectors
+
+Source: Physical inspection (2026-06-28)
+Confidence: High (direct observation)
+
+Back panel has three areas:
+
+**Left panel (two Molex connectors, stacked):**
+- Top: Molex Micro-Fit 3.0 Male 2×3 (6-pin) — USB connection to Pi (confirmed, HW-2 resolved)
+- Bottom: Molex Micro-Fit 3.0 Male 2×2 (4-pin) — daisy-chain port for linking additional
+  ACE Pro units. Protocol and pinout unknown (HW-4).
+
+**Bottom centre:** 4× circular ports in a row — likely PTFE tube outlets or filament
+sensor connectors for the 4 filament channels.
+
+**Right panel:** IEC C14 mains inlet + rocker power switch.
+
+**Implication for bridge:** The Pi connects to the ACE Pro via the top 2×3 connector.
+The 2×2 daisy-chain port is unused in the current design. If multi-ACE-Pro support
+is added in future, this port's protocol will need investigation.
+
+---
+
 ## Remaining Open Questions
 
 1. Confirmed USB PID for ACE Pro (0x018A is from one source only)
@@ -191,3 +214,4 @@ Fields: material name, color, diameter, weight, remaining, temperature settings
 4. Full ACE 2 Pro command payload encodings (only names known, not field layouts)
 5. Whether "Kobra 3 V2 8-color connection module" is a passive USB hub or active device
 6. Whether the bridge must emulate the ACE 2 Pro's DISCOVER/ASSIGN handshake exactly
+7. ACE Pro daisy-chain port (2×2) protocol and pinout (HW-4)
