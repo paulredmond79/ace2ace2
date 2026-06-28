@@ -279,10 +279,10 @@ lsusb -v | grep -A5 "28e9"
 - Do not power Pi from printer USB — current and stability are unknown
 
 ### ACE Pro
-- Powered via USB from the Pi. The standard USB-A port supplies up to 500 mA (USB 2.0)
-  or 900 mA (USB 3.0).
-- The ACE Pro's actual draw is unconfirmed — measure before deploying on a 500 mA port.
-- If draw exceeds 500 mA, use a powered USB hub between Pi and ACE Pro.
+- **Self-powered from mains** (IEC C14 inlet + rocker switch on right back panel). The ACE Pro
+  does not draw power from the Pi's USB port.
+- The USB connection to the Pi carries data only (D−, D+, GND). Pin 6 VCC is left NC per the
+  interim HW-7 stance — do not use a powered USB hub to supply VBUS. See `docs/Unknowns.md` HW-7.
 
 ### Isolation
 
@@ -303,9 +303,9 @@ If not isolated, ensure common GND between Pi and RS485 bus.
 | 1 | USB-RS485 adapter with screw terminals | CH340 or FTDI-based | ~$8–12 |
 | 1 | USB-C power supply | 5V/5A, official Pi supply | ~$10 |
 | 1 | MicroSD card | 32GB+ Class 10 / A1 | ~$8 |
-| 1 | Molex housing for Cable A | `43025-0400` (4-pin receptacle) — confirm plug/receptacle orientation on device | ~$0.60 |
+| 1 | Molex housing for Cable A (confirm orientation) | `43020-0400` plug (if device port is receptacle) OR `43025-0400` receptacle (if device port is plug) | ~$0.60 |
 | 1 | Molex housing 2×3 | `43025-0600` — Cable B (Pi → ACE Pro) | ~$0.60 |
-| 10 | Molex crimp terminals | `43030-0007`, 20–24 AWG | ~$2 |
+| 10 | Molex crimp terminals | `43030-0007` (female, 20–24 AWG) for all uses EXCEPT Cable A with `43020-0400`, which needs `43031-0007` (male tab) for those 3 contacts | ~$2 |
 | 1 | USB-A Male plug or stripped USB-A cable | Cable B (Pi → ACE Pro) | ~$2 |
 | 0.5 m | 3-conductor shielded cable, 22–24 AWG | Cable A (daisy-chain RS485 run — needs separate A, B, GND conductors) | ~$3 |
 | 1 | Molex crimp tool | Engineer PA-09 or PA-21 | ~$20 (one-time) |
