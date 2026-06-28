@@ -13,7 +13,7 @@ Complete parts list for building one ACE Bridge unit.
 
 | # | Connection | Cable | Action |
 |---|-----------|-------|--------|
-| 1 | Printer (4-pin) → ACE 2 Pro bottom-left (6-pin) | Factory signal cable (supplied with ACE 2 Pro) | None |
+| 1 | Printer (4-pin) → ACE 2 Pro bottom-left (6-pin) | "K3/K3M/S1 Signal Cable" (factory supplied with ACE 2 Pro) | None |
 | 2 | ACE 2 Pro daisy-chain back port → Pi USB | Custom Molex pigtail + USB-RS485 adapter | Build — **confirm HW-1 first** |
 | 3 | Pi USB → ACE Pro (Molex 2×3) | Custom Molex 2×3 → USB-A cable | Build |
 

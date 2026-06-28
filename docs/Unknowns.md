@@ -80,6 +80,12 @@ can be fully implemented. Items are removed when resolved.
 - **Unknown**: The daisy-chain port on the **back** of the ACE 2 Pro (where the Pi connects)
   has not been physically inspected. Pin count is likely 4-pin or 6-pin Molex Micro-Fit 3.0.
   Plug vs receptacle orientation is also unconfirmed.
+- **Indirect evidence**: Anycubic's official ACE 2 Pro Compatibility Guide (2026-06-28)
+  documents cascading two ACE 2 Pro units using "a signal adapter cable and a USB-to-RS485
+  cable." The cascade signal cable uses the same 4-pin→6-pin format as the printer-to-ACE
+  signal cable. If the second ACE 2 Pro's input side is 6-pin (matching the first unit's
+  printer-facing port), the daisy-chain port on the back may also be 6-pin. This is plausible
+  but not confirmed — the guide shows device-to-device connection, not device port close-ups.
 - **How to discover**: Physical inspection of the back of the ACE 2 Pro unit
 - **Blocks**: Cable A Molex housing selection and BOM completion
 - **Status**: ⚠️ Must resolve before building Cable A or ordering Molex housing

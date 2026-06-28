@@ -206,6 +206,77 @@ is added in future, this port's protocol will need investigation.
 
 ---
 
+## Anycubic Official Documentation — ACE 2 Pro Multi-Model Compatibility Guide
+
+Source: Anycubic Wiki — "ACE 2 Pro Multi-Model Compatibility Guide" PDF (converted via markitdown, 2026-06-28)
+Confidence: High (official manufacturer documentation)
+
+### Supported Printer Models
+
+| Printer | Firmware Required | Notes |
+|---------|------------------|-------|
+| Kobra 3 | V3.1.0.1 OTA update | — |
+| Kobra 3 V2 | V1.1.2.5 OTA update | **Target printer for bridge project** |
+| Kobra 3 Max | — | — |
+| Kobra S1 | — | Requires K3/K3M/S1 Signal Cable |
+| Kobra S1 Max | — | Requires K3/K3M/S1 Signal Cable |
+| Kobra X | — | — |
+
+**Relevance:** Bridge targets Kobra 3 V2 specifically. Printer firmware must be ≥ V1.1.2.5.
+
+### Factory Signal Cable — Official Name
+
+The factory cable supplied with the ACE 2 Pro is specifically named **"K3/K3M/S1 Signal Cable"**
+in official Anycubic documentation. For the Kobra 3 V2:
+
+- 4-pin end → printer external port (base, latch faces downward)
+- 6-pin end → ACE 2 Pro bottom-left port (latch faces outward)
+
+This is the Connection 1 in the bridge design — no action needed, use the supplied cable.
+
+### Multiple ACE 2 Pro Cascade (Kobra 3/V2/Max)
+
+The compatibility guide documents cascading two ACE 2 Pro units together. The topology is:
+
+```
+Kobra 3 V2
+    │
+    │ Signal Cable (factory supplied, 4-pin → 6-pin)
+    ▼
+ACE 2 Pro (first)
+    │
+    │ Signal Cable (second, same 4-pin → 6-pin format?)
+    ▼
+ACE 2 Pro (second)
+```
+
+**Critical finding (from guide page 8):**
+> "A signal adapter cable and a USB-to-RS485 cable are required (for Kobra 3, V2, and Max models)"
+
+This confirms:
+1. The daisy-chain connection between ACE 2 Pro units involves a USB-to-RS485 adapter
+2. This is precisely the bridge's design: Pi uses a USB-RS485 adapter to connect to the ACE 2 Pro daisy-chain port
+3. The "signal adapter cable" in the cascade diagram likely uses the same 4-pin→6-pin format as the factory cable — which would imply the daisy-chain (back) port on the ACE 2 Pro is also 6-pin (2×3)
+
+**Implication for HW-1:** The official cascade documentation is the strongest hint yet that the
+daisy-chain port (back of ACE 2 Pro) accepts the same 6-pin signal cable. However, the guide
+describes a second ACE 2 Pro being connected, not a Pi — so the back port pin count is still
+not directly confirmed. HW-1 remains open pending physical inspection.
+
+### ACE Pro / ACE 2 Pro Mixing
+
+Official confirmation: ACE Pro and ACE 2 Pro **cannot be used together** on the same printer.
+This is a fundamental constraint of the firmware. The bridge works around this by making the
+ACE Pro appear as an ACE 2 Pro to the printer.
+
+### Additional Requirements
+
+- USB-to-RS485 adapter required for cascade (mentioned explicitly in official docs)
+- Signal adapter cable required (may differ from standard K3/K3M/S1 Signal Cable for cascade)
+- Firmware update required on both printer and ACE 2 Pro before initial connection
+
+---
+
 ## Remaining Open Questions
 
 1. Confirmed USB PID for ACE Pro (0x018A is from one source only)

@@ -30,9 +30,10 @@ Molex Micro-Fit 3.0 Male, 2×3 (6-pin):
 - Pin 2: D−
 - Pin 3: D+
 - Pin 5: GND
-- Pin 6: VCC (NOT connected)
+- Pin 6: VCC/VBUS — **must connect to USB-A Pin 1** (this is the power input; device will not enumerate without it)
+- Pin 1, Pin 4: NC (do not connect)
 
-Source: decay71/multiACE. Confidence: Medium — needs physical confirmation.
+Source: decay71/multiACE + physical inspection (2026-06-28). Confidence: High (HW-2 resolved).
 
 ### Frame Format
 
@@ -144,15 +145,24 @@ Full field schema is partially documented. See `research/findings.md`.
 | Firmware base | `0x08008000` | High | hakimio |
 | Min firmware | V1.1.31 (2026-03-06) | High | hakimio |
 
-### Physical Connector (ACE 2 Pro PCB)
+### Physical Connectors (ACE 2 Pro)
 
-Molex Micro-Fit 3.0 Female, 2×2 (4-pin):
-- Pin 1: D−
-- Pin 2: D+
-- Pin 3: VCC (NOT connected)
-- Pin 4: GND
+**Bottom-left port (printer-facing) — 6-pin Molex Micro-Fit 3.0 2×3:**
+This is where the factory "K3/K3M/S1 Signal Cable" connects.
+- 4-pin end → printer base port (latch faces downward)
+- 6-pin end → ACE 2 Pro bottom-left port (latch faces outward)
 
-Source: decay71/multiACE. Confidence: Medium — needs physical confirmation.
+Source: Anycubic installation instructions + official Compatibility Guide. Confidence: High.
+
+**Back port (daisy-chain, HW-1 unresolved) — likely 4-pin or 6-pin Molex Micro-Fit 3.0:**
+This is where the Raspberry Pi connects via USB-RS485 adapter.
+Signals: RS485 A (D+), RS485 B (D−), GND. VCC if present — do not connect until voltage confirmed.
+Pin count and connector orientation require physical inspection. See `docs/Unknowns.md` HW-1.
+
+Anycubic cascade documentation confirms this port carries RS485 signals and that
+connecting a second ACE 2 Pro requires a USB-to-RS485 adapter — consistent with the
+bridge design. The signal cable in a two-ACE-2-Pro cascade uses the same 4-pin→6-pin
+cable, suggesting the daisy-chain port may also be 6-pin, but this is not yet confirmed.
 
 ### Frame Format
 

@@ -1,5 +1,18 @@
 # Hardware Documentation
 
+## Firmware Requirements
+
+Before connecting the ACE 2 Pro for the first time, update the printer firmware:
+
+| Device | Required Firmware | How to Update |
+|--------|------------------|---------------|
+| Kobra 3 V2 | **V1.1.2.5** | OTA update from printer menu |
+| ACE 2 Pro | V1.1.31 (2026-03-06) or later | OTA via printer menu after connection |
+
+Source: Anycubic ACE 2 Pro Multi-Model Compatibility Guide (official). Confidence: High.
+
+---
+
 ## Target Hardware Chain
 
 ```
@@ -28,7 +41,7 @@ Anycubic Kobra 3 V2
 
 | # | From | To | Cable | Action needed |
 |---|------|----|-------|---------------|
-| 1 | Printer (4-pin port) | ACE 2 Pro bottom-left (6-pin port) | Factory signal cable (supplied) | None — use existing |
+| 1 | Printer (4-pin port) | ACE 2 Pro bottom-left (6-pin port) | "K3/K3M/S1 Signal Cable" (factory supplied with ACE 2 Pro) | None — use existing |
 | 2 | ACE 2 Pro daisy-chain port (back, pin count TBC) | Raspberry Pi USB | Custom Molex pigtail + USB-RS485 adapter | Build — **confirm HW-1 first** |
 | 3 | Raspberry Pi USB | ACE Pro (Molex 2×3 port) | Custom Molex 2×3 → USB-A cable | Build |
 
