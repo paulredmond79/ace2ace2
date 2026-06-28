@@ -143,9 +143,10 @@ equivalent pins. Wire only these 3 conductors to the RS485 adapter's screw termi
 > and terminate directly at the RS485 adapter's screw terminals.
 
 **Parts needed:**
-- 1× Molex 4-pin housing — `43025-0400` receptacle (or `43020-0400` plug — confirm device
-  connector orientation before ordering)
-- 3× Molex `43030-0007` crimp terminals (20–24 AWG)
+- 1× Molex 4-pin housing — confirm device port gender before ordering:
+  - Device port = receptacle (socket) → cable needs **plug** `43020-0400` + `43031-0007` male tab contacts
+  - Device port = plug (pin header) → cable needs **receptacle** `43025-0400` + `43030-0007` female crimp contacts
+- 3× Molex crimp contacts matching your housing choice (`43031-0007` or `43030-0007`), 20–24 AWG
 - 1× USB-RS485 adapter (CH340 or FTDI-based, with screw terminal block)
 - ~0.5–1 m **3-conductor shielded cable**, 22–24 AWG (e.g. Alpha Wire 5563 or Belden 9533)
 

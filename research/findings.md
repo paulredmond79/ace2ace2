@@ -279,10 +279,12 @@ This confirms:
 2. This is precisely the bridge's design: Pi uses a USB-RS485 adapter to connect to the ACE 2 Pro daisy-chain port
 3. The "signal adapter cable" in the cascade diagram likely uses the same 4-pin→6-pin format as the factory cable — which would imply the daisy-chain (back) port on the ACE 2 Pro is also 6-pin (2×3)
 
-**Implication for HW-1:** The official cascade documentation is the strongest hint yet that the
-daisy-chain port (back of ACE 2 Pro) accepts the same 6-pin signal cable. However, the guide
-describes a second ACE 2 Pro being connected, not a Pi — so the back port pin count is still
-not directly confirmed. HW-1 remains open pending physical inspection.
+**HW-1 resolved (physical inspection, 2026-06-28):** The official cascade documentation
+implied the back daisy-chain port accepts the same 6-pin signal cable; however, physical
+inspection confirmed the daisy-chain port is the **bottom 4-pin (2×2) Micro-Fit 3.0
+connector** on the ACE 2 Pro back panel — not the upper 6-pin port. The cable uses a
+4-pin → 6-pin format (Molex pigtail to RS485 adapter screw terminals). Do not connect to
+the upper 6-pin back-panel port; its purpose is unknown (tracked as HW-6).
 
 ### ACE Pro / ACE 2 Pro Mixing
 
