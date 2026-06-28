@@ -13,9 +13,9 @@ Complete parts list for building one ACE Bridge unit.
 
 | # | Connection | Cable | Action |
 |---|-----------|-------|--------|
-| 1 | Printer → ACE 2 Pro (front port) | Factory RS485 cable | None — already provided |
-| 2 | ACE 2 Pro daisy-chain (back) → Pi | Custom Molex 2×2 pigtail + USB-RS485 adapter | Build |
-| 3 | Pi → ACE Pro | Custom Molex 2×3 → USB-A cable | Build |
+| 1 | Printer (4-pin) → ACE 2 Pro bottom-left (6-pin) | Factory signal cable (supplied with ACE 2 Pro) | None |
+| 2 | ACE 2 Pro daisy-chain back port → Pi USB | Custom Molex pigtail + USB-RS485 adapter | Build — **confirm HW-1 first** |
+| 3 | Pi USB → ACE Pro (Molex 2×3) | Custom Molex 2×3 → USB-A cable | Build |
 
 ---
 
@@ -49,16 +49,19 @@ connect the Molex pigtail wires directly to the A, B, and GND terminals.
 
 ### Molex Pigtail (ACE 2 Pro Daisy-Chain End)
 
-> ⚠️ **HW-1**: Verify the ACE 2 Pro connector type before ordering the Molex housing.
-> If the device PCB has a **plug header** (male pins), use `43025-0400` (receptacle, female
-> socket contacts). If it has a **receptacle housing** (female sockets), use `43020-0400`
-> (plug, male tab contacts, with `43031-0007` terminals instead). See `docs/Hardware.md`.
+> ⚠️ **HW-1 BLOCKS THIS**: The daisy-chain port on the back of the ACE 2 Pro has not
+> been physically inspected. Do not order the Molex housing until you have confirmed:
+> 1. Pin count (4-pin or 6-pin)
+> 2. Connector orientation (plug header or receptacle housing on device)
+>
+> Note: the ACE 2 Pro's **printer-facing** port (bottom-left) is 6-pin — do not confuse
+> it with the daisy-chain port on the back.
 
 | Qty | Item | Molex Part | Source | Est. Unit Cost |
 |-----|------|-----------|--------|---------------|
-| 1 | Molex Micro-Fit 3.0 housing, 2×2 (4-circuit) — see note above | **43025-0400** (if device has plug header) | Digi-Key / Molex | ~$0.60 |
+| 1 | Molex Micro-Fit 3.0 housing — **do not order until HW-1 confirmed** | TBC (4-pin or 6-pin; 43025 or 43020 series) | Digi-Key / Molex | ~$0.60 |
 | 3 | Molex Micro-Fit 3.0 Female crimp terminal, 20–24 AWG | **43030-0007** | Digi-Key / Molex | ~$0.25 each (~$0.75) |
-| ~0.5 m | 3-conductor shielded cable, 22–24 AWG | Alpha Wire 5563 or Belden 9533 (not 9501 — that is 2-conductor only) | Digi-Key / local | ~$2–3 |
+| ~0.5 m | 3-conductor shielded cable, 22–24 AWG | Alpha Wire 5563 or Belden 9533 (not 9501 — 2-conductor only) | Digi-Key / local | ~$2–3 |
 
 Wire the pigtail as follows (connect free ends to USB-RS485 adapter terminals):
 

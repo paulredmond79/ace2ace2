@@ -156,7 +156,5 @@ complete if tests fail or imports are broken.
 
 ## Future (Speculative)
 
-- Support for ACE 2 Pro as the downstream device (bridge between two new units)
-- Support for more than one ACE Pro
 - Automated protocol discovery (fuzzing in safe mode)
 - OTA update mechanism for bridge itself

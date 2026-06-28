@@ -73,12 +73,16 @@ can be fully implemented. Items are removed when resolved.
 
 ## Hardware
 
-### HW-1: ACE 2 Pro RS485 Connector Type — Physical Confirmation
-- **Unknown**: Molex Micro-Fit 3.0 2×2 is from decay71/multiACE README; needs physical verification
-- **How to discover**: Inspect ACE 2 Pro hardware with calipers/reference
-- **Blocks**: Cable ordering for BOM
-- **Status**: High-confidence hypothesis; needs physical confirmation before ordering parts
-- **Documented**: Pinout and Molex part numbers recorded in `docs/Hardware.md`
+### HW-1: ACE 2 Pro Daisy-Chain Port (Back) — Connector Type
+- **Known**: The ACE 2 Pro printer-facing port (bottom-left) is **6-pin Molex Micro-Fit 3.0
+  2×3** — confirmed from Anycubic installation instructions (factory cable has 6-pin end here,
+  4-pin end at printer). Do not modify or replicate this connection.
+- **Unknown**: The daisy-chain port on the **back** of the ACE 2 Pro (where the Pi connects)
+  has not been physically inspected. Pin count is likely 4-pin or 6-pin Molex Micro-Fit 3.0.
+  Plug vs receptacle orientation is also unconfirmed.
+- **How to discover**: Physical inspection of the back of the ACE 2 Pro unit
+- **Blocks**: Cable A Molex housing selection and BOM completion
+- **Status**: ⚠️ Must resolve before building Cable A or ordering Molex housing
 
 ### HW-4: ACE Pro Daisy-Chain Connector Protocol
 - **Known**: The Molex Micro-Fit 3.0 2×2 connector on the ACE Pro back panel (below the
